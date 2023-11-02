@@ -1,0 +1,87 @@
+<!DOCTYPE html>{% load static%}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>View Invoice</title>
+    <link rel="stylesheet" href="{%static 'css/invoice-template-1.css' %}" media="all" />
+    <link rel=”stylesheet” href=”https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.css”>
+  </head>
+  <body>
+    <header class="clearfix">
+      <div id="logo">
+        <img src="{% static 'img/invoice_logo.jpeg'%}" style="width: 150px; height:116px"> 
+      </div>
+      <div id="company">
+        <h1 class="name">{{company.name}}</h1>
+        <div class="vendor_address">
+            <pre style="font-family: inherit">
+                Shop No-5, 1st Floor, Abhinandan Complex,
+                BRTS Road, opp. TRP Mall BRTS Main Road,
+                Bopal, Ahmedabad, Gujarat 380058
+            </pre>
+        </div>
+        <div>{{company.phone}}</div>
+        <div> <p><a href="{{company.web}}">www.therowala.in</a>.</p> </div>
+        
+      </div>
+      </div>
+    </header>
+    <main>
+      <div id="details" class="clearfix">
+        <div id="client">
+          <div class="to">INVOICE TO:</div>
+          <h2 class="name">{{invoice.customer}}</h2>
+          <div class="address">{{invoice.contact}}</div>
+          <div class="email"><a href="mailto:{{customer_email}}">{{invoice.email}}</a></div>
+        </div>
+        <div id="invoice">
+          <h1>#{{invoice.id}}</h1>
+          <div class="date">Date of Invoice: {{invoice.created_at|date:"Y-m-d"}}</div>
+        </div>
+      </div>
+      <table border="0" cellspacing="0" cellpadding="0">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>DESCRIPTION</th>
+            <th>RATE</th>
+            <th>QUANTITY</th>
+            <th>TOTAL</th>
+          </tr>
+        </thead>
+        <tbody>
+			{% for item in invoice_detail %}
+          <tr>
+            <td >{{forloop.counter}}</td>
+            <td class="desc">{{item.product}}</td>
+            <td class="unit">{{item.product.product_price}}</td>
+            <td class="qty">{{item.amount}}</td>
+            <td >{{item.get_total_bill}}</td>
+		  </tr>
+		  {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2"></td>
+            <td colspan="2">SUBTOTAL</td>
+            <td>{{invoice.get_total_bill}}</td>
+          </tr>
+          <tr>
+            <td colspan="2"></td>
+            <td colspan="2">TAX 0%</td>
+            <td>0.0%</td>
+          </tr>
+          <tr>
+            <td colspan="2"></td>
+            <td colspan="2">GRAND TOTAL</td>
+            <td>{{invoice.get_total_bill}}</td>
+          </tr>
+        </tfoot>
+      </table>
+      <div id="thanks">Thank you!</div>
+    </main>
+    <footer>
+      Invoice was created on a computer and is valid without the signature and seal.
+    </footer>
+  </body>
+</html>
