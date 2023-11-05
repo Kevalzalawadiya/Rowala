@@ -201,8 +201,6 @@ def view_product(request):
 
 #     return render(request, "invoice/view_customer.html", context)
 
-
-# Invoice view
 def create_invoice(request):
     total_product = Product.objects.count()
     # total_customer = Customer.objects.count()
@@ -211,9 +209,12 @@ def create_invoice(request):
 
     form = InvoiceForm()
     formset = InvoiceDetailFormSet()
+    product_form = ProductForm()
     if request.method == "POST":
         form = InvoiceForm(request.POST)
         formset = InvoiceDetailFormSet(request.POST)
+        product_form = ProductForm(request.POST)
+        
         if form.is_valid():
             invoice = Invoice.objects.create(
                 customer=form.cleaned_data.get("customer"),
@@ -221,10 +222,15 @@ def create_invoice(request):
                 email=form.cleaned_data.get("email"),
                 date=form.cleaned_data.get("date"),
             )
+
         if formset.is_valid():
             total = 0
             for form in formset:
-                product = form.cleaned_data.get("product")
+                product = Product.objects.create(
+                    product_name = form.cleaned_data.get("product_name"),
+                    product_price = form.cleaned_data.get("product_price")
+                )
+                print(product)
                 amount = form.cleaned_data.get("amount")
                 if product and amount:
                     # Sum each row
@@ -252,12 +258,12 @@ def create_invoice(request):
         # "total_customer": total_customer,
         "total_invoice": total_invoice,
         "total_income": total_income,
+        "product_form": product_form,
         "form": form,
         "formset": formset,
     }
 
     return render(request, "invoice/create_invoice.html", context)
-
 
 def view_invoice(request):
     total_product = Product.objects.count()
@@ -308,7 +314,8 @@ def view_invoice_pdf_detail(request, id=None):
     context = {
         "company": {
             "name": "Rowala",
-            "phone": "+91 90164 67984 ",
+            "phone_1": "+91 90164 67984 ",
+            "phone_2": "+91 74349 16606 ",
             "web": "https://therowala.in/",
         },
         "invoice": invoice,

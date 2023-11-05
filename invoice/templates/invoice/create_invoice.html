@@ -32,23 +32,30 @@
                         {{form.email}}
                     </div>
                     
-                    {{ formset.management_form }}
+
+                    {{ formset.management_form }}  
                     {% for form in formset %}
                     <div class="table">
                         <table class="table">
                             <tr>
-                                <td style="border: 0; padding: 0 0.5em 0 0; width: 80%">
+                                <td style="border: 0; padding: 0 0.5em 0 0; width: 70%">
                                     <label class="form-label" for="invoice_detail_product">Product name</label>
-                                    {{form.product}}
+                                    {{form.product_name}}
                                 </td>
                                 <td style="border: 0; padding: 0 0 0 0.5em;">
-                                    <label class="form-label" for="invoice_detail_amount">Amounts</label>
+                                    <label class="form-label" for="invoice_detail_product">Product Price</label>
+                                    {{form.product_price}}
+                                </td>
+                                
+                                <td style="border: 0; padding: 0 0 0 0.5em;">
+                                    <label class="form-label" for="invoice_detail_amount">Quantity</label>
                                     {{form.amount}}
                                 </td>
                             </tr>
                         </table>
                     </div>
-                    {% endfor %}
+                    {% endfor %}   
+
                     <div class="mb-3 d-flex justify-content-center">
                         <input class="btn btn-outline-warning add-form-row" style="margin: 0 1em 0 1em; width: 40%"
                             type="button" value="Add more product" id="add_more">
