@@ -195,12 +195,19 @@ table tfoot tr td:first-child {
 }
 
 footer {
-  color: #777777;
+  position:static;
   width: 100%;
-  height: 30px;
+  height: 100px;
+  top: 100;
+  right: 0;
   bottom: 0;
-  border-top: 1px solid #AAAAAA;
-  padding: 8px 0;
-  text-align: right;
+  left: 0;
+  margin-top: -300px;
 }
+
+footer table td {
+  background-color: white;
+}
+
+
 

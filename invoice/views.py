@@ -337,9 +337,14 @@ def view_invoice_pdf_detail(request, id=None):
 
 def generate_PDF(request, id):
     url = request.build_absolute_uri(reverse('view_invoice_pdf_detail', args=[id]))
-    print ("URL : my url is ", url)
-    # Use False instead of output path to save pdf to a variable
-    pdf = pdfkit.from_url(url, False)
+    options = {
+    'page-size': 'A4',
+    'margin-top': '0.75in',
+    'margin-right': '0.75in',
+    'margin-bottom': '0.75in',
+    'margin-left': '0.75in',
+}
+    pdf = pdfkit.from_url(url, False, options=options)
     response = HttpResponse(pdf,content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
 
