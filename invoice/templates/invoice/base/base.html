@@ -31,7 +31,7 @@
 
 </head>
 
-<body id="page-top">
+<body id="page-top" onload="startTime()">
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -105,34 +105,55 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="{% url 'create_invoice' %}">Add</a>
                         <a class="collapse-item" href="{% url 'view_invoice' %}">View</a>
-                        <a class="collapse-item" href="{% url 'download_all_invoice' %}">Download</a>
-                        <a class="collapse-item" data-target="#deleteModal" data-toggle="modal">Delete</a>
+                        {% comment %} <a class="collapse-item" href="{% url 'download_all_invoice' %}">Download</a> {% endcomment %}
+                        <a class="collapse-item" data-toggle="modal" data-target="#deletemodel">Delete</a>
                         {% comment %} <a href="{% url 'delete_all_invoice' %}">Delete</a> {% endcomment %}
 
                     </div>
                 </div>
             </li>
-            <div class="modal fade" id="deleteModal">
-                <div class="modal-dialog">
-                 <div class="modal-content">
-                  <div class="modal-header">
-                   <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                   <span aria-hidden="true">&times;</span>
-                   </button>
-                  </div>
-                  <div class="modal-body">
-                   <p>Are you sure you want to delete?</p>
-                 </div>
-                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" id="close-modal">No</button>
-                   <button type="button" class="btn btn-danger"><a href="{% url 'delete_all_invoice' %}">Delete</a></button>
-                  </div>
-                 </div>
+             <!-- Modal -->
+            <div class="modal fade" id="deletemodel" tabindex="-1" role="dialog" aria-labelledby="deletemodelTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <h1 class="h6 mb-0 text-gray-800">
+                                Are You Sure delete all invoice ?
+                                <label class="m-0 font-weight-bold text-danger"> You might loose all your data.</label>
+                            </h1>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <a class="btn btn-danger" href="{% url 'delete_all_invoice' %}" role="button"> Delete</a>
+                        </div>
+                    </div>
                 </div>
-               </div>
+            </div>    
 
             <!-- Divider -->
+            <hr class="sidebar-divider">
+            
+            <!-- Nav-item subscription-->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages-service"
+                    aria-expanded="true" aria-controls="collapsePages-service">
+                    <i class="fas fa-bell"></i>
+                    <span>Invoices</span>
+                </a>
+                <div id="collapsePages-service" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{% url 'service-view-all' %}">All Service</a>
+                        <a class="collapse-item" href="{% url 'service-view-pending' %}">Pending Service</a>
+                        <a class="collapse-item" href="{% url 'service-view-complate' %}">Complate Service</a>
+                        <a class="collapse-item" href="{% url 'service-view-search' %}">Search Service</a>
+                    </div>
+                </div>
+            </li>
             <hr class="sidebar-divider">
 
             <!-- Sidebar Toggler (Sidebar) -->
@@ -191,23 +212,25 @@
                         </div> {% endcomment %}
 
                         <!-- Earnings (Monthly) Card Example -->
-                        {% comment %} <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total customers
+                                                Date and Time
                                             </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{total_customer}}</div>
+                                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                                                <div class="tile-content" id="txt"> </div>
+                                            </div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-user fa-2x text-gray-300"></i>
+                                            <i class="far fa-clock	 fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div> {% endcomment %}
+                        </div> 
 
                         <!-- Earnings (Monthly) Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -242,7 +265,7 @@
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{total_income}}</div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                            <i class="fas fa-rupee-sign fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -253,6 +276,7 @@
                     <!-- Content Row -->
                     {% block content %}
 
+                        
 
                     {% endblock %}
                 </div>
@@ -297,6 +321,49 @@
     <!-- Page level custom scripts -->
     <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
     <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
+
+    <script type="text/javascript">
+        function startTime() {
+            var today = new Date();
+            var h = today.getHours();
+            var m = today.getMinutes();
+            var s = today.getSeconds();
+            var day = today.getDate();
+            var month = today.getMonth() + 1; // Months are zero-based, so add 1
+            var year = today.getFullYear();
+        
+            m = checkTime(m);
+            s = checkTime(s);
+        
+            var dateTimeString = day + "/" + month + "/" + year + " " + h + ":" + m + ":" + s;
+            document.getElementById('txt').innerHTML = dateTimeString;
+        
+            t = setTimeout(startTime, 500);
+        }
+        
+        function checkTime(i) {
+            if (i < 10) {
+                i = "0" + i;
+            }
+            return i;
+        }
+            // Get today's date in YYYY-MM-DD format
+        function getToday() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+    
+        // Set today's date as the default value for start_date and end_date inputs
+        document.getElementById('start_date').value = getToday();
+        document.getElementById('end_date').value = getToday();
+        
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 
     {% block custom_js %}{% endblock %}
 

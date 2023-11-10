@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 # Create your models here.
@@ -27,6 +28,15 @@ class Product(models.Model):
 #         return str(self.customer_name)
 
 
+class Subscription(models.Model):
+    months = models.IntegerField()
+    # months = models.PositiveIntegerField(default=0)
+    service_period = models.IntegerField(help_text='Enter number of mounth in which you want to give services.')
+
+    def __str__(self):
+        return f"{self.service_period} Services for {self.months}-months "
+
+
 class Invoice(models.Model):
     date = models.DateField(auto_now_add=True)
     customer = models.TextField(default='')
@@ -35,7 +45,10 @@ class Invoice(models.Model):
     email = models.EmailField(default='', blank=True, null=True)
     comments = models.BigIntegerField(blank=True, null=True) # Mobile Number field
     total = models.FloatField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
+    subscription = models.ForeignKey(
+        Subscription, on_delete=models.SET_NULL, blank=True, null=True
+)
+
 
     def __str__(self):
         return str(self.id)
@@ -49,6 +62,9 @@ class Invoice(models.Model):
         return total
 
 
+
+
+
 class InvoiceDetail(models.Model):
     invoice = models.ForeignKey(
         Invoice, on_delete=models.SET_NULL, blank=True, null=True, related_name='invoice')
@@ -60,3 +76,18 @@ class InvoiceDetail(models.Model):
     def get_total_bill(self):
         total = float(self.product.product_price) * float(self.amount)
         return total
+
+
+
+
+class Service(models.Model):
+    invoice = models.ForeignKey(
+        Invoice, on_delete=models.CASCADE, blank=True, null=True, related_name='total_service')
+    service_date = models.DateField()
+    generate_date = models.DateField(auto_now_add=True)
+    complate_date = models.DateField()
+    is_complate = models.BooleanField(default=False)
+    service_number = models.IntegerField(default=0)
+    
+    def __str__(self):
+        return f"{self.service_date} {self.is_complate}"

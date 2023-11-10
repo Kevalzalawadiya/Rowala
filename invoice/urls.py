@@ -22,7 +22,13 @@ urlpatterns = [
     path('download_all_invoice/', views.download_all, name='download_all_invoice'),
     path('view_invoice_detail/<int:pk>/', views.view_invoice_detail, name='view_invoice_detail'),
     path('invoice-detail/<id>/', views.view_invoice_pdf_detail, name='view_invoice_pdf_detail'),
-    path('invoice-download/<id>/', views.generate_PDF, name='invoice-download')
+    path('invoice-download/<id>/', views.generate_PDF, name='invoice-download'),
+    path('view_all_service/', views.all_service_management, name='service-view-all'),
+    path('view_pending_service/', views.pending_service_management, name='service-view-pending'),
+    path('view_complate_service/', views.complate_service_management, name='service-view-complate'),
+    path('view_search_service/', views.search_service_management, name='service-view-search'),    
+    path('service_status_change/<int:pk>', views.service_status_change, name="service_status_change"),
+    
      
 
 ]
