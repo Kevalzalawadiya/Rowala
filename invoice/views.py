@@ -339,8 +339,8 @@ def pending_service_management(request):
         "total_product": total_product,
         "total_invoice": total_invoice,
         "total_income": total_income,
-        "all_services":all_services,
-        "service_count":service_count,
+        "all_services": all_services,
+        "service_count": service_count,
     }
     return render(request, "invoice/view_pending_service.html", context)
     
@@ -364,10 +364,8 @@ def complate_service_management(request):
         end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
 
         all_services = Service.objects.filter(
-                    Q(service_date__range=(start_date, end_date)) & Q(is_complate=False)
+                    Q(service_date__range=(start_date, end_date)) & Q(is_complate=True)
                 ).order_by('service_date')     
-        
-        
         
     context = {
         "total_product": total_product,
@@ -378,29 +376,6 @@ def complate_service_management(request):
     }
     return render(request, "invoice/view_complate_service.html", context)
 
-def search_service_management(request):
-    total_product = Product.objects.count()
-    total_invoice = Invoice.objects.count()
-    total_income = getTotalIncome()
-    today = timezone.now().date()
-    service_count = Invoice.objects.all()
-    all_invoice_details = None
-    
-    if request.method == "POST":
-        search_details = request.POST.get("search_details")
-        all_invoice_details = Invoice.objects.get(id=search_details)
-
-    # all_invoice_details = Invoice.objects.all()
-        
-        
-    context = {
-        "total_product": total_product,
-        "total_invoice": total_invoice,
-        "total_income": total_income,
-        "service_count":service_count,
-        "all_invoice_details":all_invoice_details
-    }
-    return render(request, "invoice/view_search_service.html", context)
     
 def service_status_change(request, pk):
     today = datetime.now().date()

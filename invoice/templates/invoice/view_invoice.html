@@ -29,7 +29,60 @@
                         {% for i in invoice %}
                         <tr>
                             <td style="padding: 0.45em;">
-                                {{i.id}}
+                                <a href="#" data-toggle="modal" data-target="#serviceModal{{ i.id }}" > {{ i.id }} </a>
+                                <!-- Modal -->
+                                <div class="modal fade" id="serviceModal{{ i.id }}" tabindex="-1" role="dialog" aria-labelledby="serviceModalTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle"> Invoice id {{i.id}}</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <label class="m-0 font-weight-bold text-secondary"> {{i.subscription}}</label>
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered ">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col"> Service id</th>
+                                                                <th scope="col"> Service date</th>
+                                                                <th scope="col"> Generate date</th>
+                                                                <th scope="col"> Complate date</th>
+                                                                <th scope="col"> is_complate</th>
+                                                                <th scope="col"> service_number</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for service in i.total_service.all %}
+                                                            <tr>
+                                                                <td> {{service.id}} </td>
+                                                                <td> {{service.service_date}} </td>
+                                                                <td> {{service.generate_date}} </td>
+                                                                <td> {{service.complate_date}} </td>
+                                                                {% if service.is_complate %}
+                                                                    <td> 
+                                                                        <i class='far fa-check-circle' style='font-size:20px;color:green' data-toggle="tooltip"
+                                                                            title="{{service.service_number}} service, expected date this service is :-{{service.service_date}} complated at:-{{service.complate_date}}">
+                                                                        </i>
+                                                                    </td>
+                                                                {% else %}
+                                                                <td> 
+                                                                    <i class="fa fa-times-circle" style="font-size:20px;color:red"></i>    
+                                                                </td>
+                                                                {% endif%}
+                                                                <td> {{service.service_number}} / {{i.get_total_services}} </td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end modal-->
                             </td>
                             <td style="padding: 0.45em;">
                                 {{i.date}}

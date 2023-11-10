@@ -26,9 +26,7 @@ urlpatterns = [
     path('view_all_service/', views.all_service_management, name='service-view-all'),
     path('view_pending_service/', views.pending_service_management, name='service-view-pending'),
     path('view_complate_service/', views.complate_service_management, name='service-view-complate'),
-    path('view_search_service/', views.search_service_management, name='service-view-search'),    
     path('service_status_change/<int:pk>', views.service_status_change, name="service_status_change"),
     
      
-
 ]

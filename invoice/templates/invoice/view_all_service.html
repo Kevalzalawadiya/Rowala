@@ -33,12 +33,12 @@
                     <table class="table table-bordered" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th style="width:%"> Service Id </th>
+                                <th style="width:10%"> Service Id </th>
                                 <th style="width:15%"> Service Date</th>
                                 <th style="width:20%">Customer Info</th>
                                 <th style="width:20%">Address</th>
                                 <th style="width:15%"> Service Status</th>
-                                <th style="width:12%"> Invoice</th>
+                                <th style="width:10%"> Invoice</th>
                             </tr>
                         </thead>
                         <tfoot>
@@ -55,26 +55,26 @@
                             {% for service in all_services %}
                             <tr>
                                 <td> {{service.id}} </td>
-                                <td>{{service.service_date| date:"d M, Y"}}</td>
+                                <td>{{service.service_date| date:"d M, Y"}} ( {{service.service_number}} / {{service.invoice.get_total_services}} ) </td>
                                 <td>{{service.invoice.customer}}-{{service.invoice.comments}}</td>
                                 <td> {{service.invoice.contact}} </td>
                                 {% if service.is_complate %}
-                                    <td>  <i class='far fa-check-circle' style='font-size:20px;color:green' data-toggle="tooltip"
-                                             title="{{service.service_number}} service, expected date of complate:-{{service.service_date}} complated at:-{{service.complate_date}}">
-                                            </i>
+                                    <td>  
+                                        <i class='far fa-check-circle' style='font-size:20px;color:green' data-toggle="tooltip"
+                                             title="{{service.service_number}} service, expected date this service is :-{{service.service_date}} complated at:-{{service.complate_date}}">
+                                        </i>
                                     </td>
                                 {% else %}
                                     <td> 
-                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModalCenter" >
-                                            Pandding
+                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModalCenter{{service.invoice.id}}" >
+                                            Pending
                                         </button>
-                                            
                                             <!-- Modal -->
-                                            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                            <div class="modal fade" id="exampleModalCenter{{service.invoice.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLongTitle"> {{service.invoice.id}}</h5>
+                                                        <h5 class="modal-title" id="exampleModalLongTitle"> Invoice id {{service.invoice.id}}</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                         </button>
@@ -82,9 +82,9 @@
                                                     <form method='post' action="{% url 'service_status_change' service.id %}">
                                                         {% csrf_token %}
                                                         <div class="modal-body">
-                                                            <h1 class="h6 mb-0 text-gray-800">This is the <b>{{service.service_number}}</b> service of
-                                                                <b> {{service.invoice.customer}} </b> ? 
-                                                            You can check more details on <a href="{% url 'view_invoice_pdf_detail' id=service.invoice.id %}"> View invoice </a>
+                                                            <h1 class="h6 mb-0 text-gray-800"> Dear sir,
+                                                                this is service of <b> {{service.invoice.customer}} </b>
+                                                                You can check more details on <a href="{% url 'view_invoice_pdf_detail' id=service.invoice.id %}"> View invoice </a>
                                                             </h1>
                                                         </div>
                                                         <div class="modal-footer">
