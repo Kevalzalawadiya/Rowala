@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import formset_factory
 
-from .models import *
+from .models import Product, Invoice, InvoiceDetail
 
 
 class ProductForm(forms.ModelForm):
@@ -23,6 +23,7 @@ class ProductForm(forms.ModelForm):
                 'id': 'product_price',
                 'placeholder': 'Enter price of the product',
                 'type': 'number',
+                'required': 'required',
             }),
             'product_unit': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -30,34 +31,7 @@ class ProductForm(forms.ModelForm):
                 'placeholder': 'Enter unit of the product',
             }),
         }
-
-
-# class CustomerForm(forms.ModelForm):
-#     class Meta:
-#         model = Customer
-#         fields = [
-#             'customer_name',
-#             'customer_gender',
-#             'customer_dob',
-#         ]
-#         widgets = {
-#             'customer_name': forms.TextInput(attrs={
-#                 'class': 'form-control',
-#                 'id': 'customer_name',
-#                 'placeholder': 'Enter name of the customer',
-#             }),
-#             'customer_gender': forms.Select(attrs={
-#                 'class': 'form-control',
-#                 'id': 'customer_gender',
-#             }),
-#             'customer_dob': forms.DateInput(attrs={
-#                 'class': 'form-control',
-#                 'id': 'customer_dob',
-#                 'placeholder': '2000-01-01',
-#                 'type': 'date',
-#             }),
-#         }
-
+        
 
 class InvoiceForm(forms.ModelForm):
     class Meta:
@@ -93,8 +67,14 @@ class InvoiceForm(forms.ModelForm):
             'subscription': forms.Select(attrs={
                 'class': 'form-control',
                 'id': 'invoice_detail_product',
+                'required': 'required',
+
             }),
         }
+        
+    def __init__(self, *args, **kwargs):
+        super(InvoiceForm, self).__init__(*args, **kwargs)
+        self.fields['subscription'].empty_label = None
 
 
 class InvoiceDetailForm(forms.ModelForm):
@@ -109,6 +89,7 @@ class InvoiceDetailForm(forms.ModelForm):
                 'id': 'invoice_detail_amount',
                 'placeholder': '0',
                 'type': 'number',
+                'required': 'required',
             }),
         }
     product_name = forms.CharField(
@@ -117,6 +98,8 @@ class InvoiceDetailForm(forms.ModelForm):
             'class': 'form-control',
             'id': 'product_name',
             'placeholder': 'Enter name of the product',
+            'required': 'required',
+
         })
     )
     product_price = forms.FloatField(
@@ -126,6 +109,7 @@ class InvoiceDetailForm(forms.ModelForm):
             'id': 'product_price',
             'placeholder': 'Enter price of the product',
             'type': 'number',
+            'required': 'required',
         })
     )
 

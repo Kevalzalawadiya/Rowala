@@ -339,8 +339,8 @@ def pending_service_management(request):
         "total_product": total_product,
         "total_invoice": total_invoice,
         "total_income": total_income,
-        "all_services":all_services,
-        "service_count":service_count,
+        "all_services": all_services,
+        "service_count": service_count,
     }
     return render(request, "invoice/view_pending_service.html", context)
     
@@ -364,10 +364,8 @@ def complate_service_management(request):
         end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
 
         all_services = Service.objects.filter(
-                    Q(service_date__range=(start_date, end_date)) & Q(is_complate=False)
+                    Q(service_date__range=(start_date, end_date)) & Q(is_complate=True)
                 ).order_by('service_date')     
-        
-        
         
     context = {
         "total_product": total_product,
