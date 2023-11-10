@@ -376,29 +376,6 @@ def complate_service_management(request):
     }
     return render(request, "invoice/view_complate_service.html", context)
 
-def search_service_management(request):
-    total_product = Product.objects.count()
-    total_invoice = Invoice.objects.count()
-    total_income = getTotalIncome()
-    today = timezone.now().date()
-    service_count = Invoice.objects.all()
-    all_invoice_details = None
-    
-    if request.method == "POST":
-        search_details = request.POST.get("search_details")
-        all_invoice_details = Invoice.objects.get(id=search_details)
-
-    # all_invoice_details = Invoice.objects.all()
-        
-        
-    context = {
-        "total_product": total_product,
-        "total_invoice": total_invoice,
-        "total_income": total_income,
-        "service_count":service_count,
-        "all_invoice_details":all_invoice_details
-    }
-    return render(request, "invoice/view_search_service.html", context)
     
 def service_status_change(request, pk):
     today = datetime.now().date()
