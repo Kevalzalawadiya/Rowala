@@ -31,6 +31,10 @@
                         <label class="form-label" for="invoice_email">Email</label>
                         {{form.email}}
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="subscription"> Service Time</label>
+                        {{form.subscription}}
+                    </div>
                     
 
                     {{ formset.management_form }}  
@@ -39,11 +43,11 @@
                         <table class="table">
                             <tr>
                                 <td style="border: 0; padding: 0 0.5em 0 0; width: 70%">
-                                    <label class="form-label" for="invoice_detail_product">Product name</label>
+                                    <label class="form-label" for="product_name">Product name</label>
                                     {{form.product_name}}
                                 </td>
                                 <td style="border: 0; padding: 0 0 0 0.5em;">
-                                    <label class="form-label" for="invoice_detail_product">Product Price</label>
+                                    <label class="form-label" for="product_price">Product Price</label>
                                     {{form.product_price}}
                                 </td>
                                 
@@ -51,6 +55,7 @@
                                     <label class="form-label" for="invoice_detail_amount">Quantity</label>
                                     {{form.amount}}
                                 </td>
+
                             </tr>
                         </table>
                     </div>

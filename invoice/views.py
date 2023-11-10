@@ -11,6 +11,10 @@ from django.shortcuts import render, redirect, get_object_or_404, reverse
 from datetime import timedelta, datetime
 import pdfkit
 
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
+
+from django.db.models import Q
 
 
 # Create your views here.
@@ -219,10 +223,28 @@ def create_invoice(request):
             invoice = Invoice.objects.create(
                 customer=form.cleaned_data.get("customer"),
                 contact=form.cleaned_data.get("contact"),
+                comments =form.cleaned_data.get("comments"),
                 email=form.cleaned_data.get("email"),
-                date=form.cleaned_data.get("date"),
+                date=form.cleaned_data.get("date"), 
+                subscription=form.cleaned_data.get("subscription"),
             )
-
+            # print("------------------>",invoice.subscription.months) #12
+            # print("------------------>",invoice.subscription.service_period)
+            enddate_date = invoice.date + relativedelta(months=invoice.subscription.months) #2024-11-7
+            service_dates = invoice.date 
+            service_number = 1
+            while service_dates < enddate_date:
+            # service date got at after 2 time
+                print ("----->", service_dates) 
+                service_dates = service_dates + relativedelta(months=invoice.subscription.service_period)
+                Service.objects.create(
+                    invoice = invoice,
+                    service_date = service_dates,
+                    complate_date = service_dates,
+                    service_number = service_number
+                )
+                service_number +=1
+            
         if formset.is_valid():
             total = 0
             for form in formset:
@@ -265,6 +287,132 @@ def create_invoice(request):
 
     return render(request, "invoice/create_invoice.html", context)
 
+def all_service_management(request):
+    total_product = Product.objects.count()
+    total_invoice = Invoice.objects.count()
+    total_income = getTotalIncome()
+    today = timezone.now().date()
+    tomorrow = today + timedelta(days=1)
+    all_services = Service.objects.filter(service_date__range=[today, tomorrow]).order_by('service_date')
+    # all_services = Service.objects.all()
+    service_count = Invoice.objects.all()
+    
+    
+    if request.method == "POST":        
+        start_date_str = request.POST.get("start_date")
+        end_date_str = request.POST.get("end_date") 
+        
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+
+        all_services = Service.objects.filter(service_date__range=(start_date, end_date))
+
+    context = {
+        "total_product": total_product,
+        "total_invoice": total_invoice,
+        "total_income": total_income,
+        "all_services": all_services,
+        "service_count": service_count,
+    }
+    return render(request, "invoice/view_all_service.html", context)
+
+def pending_service_management(request):
+    total_product = Product.objects.count()
+    total_invoice = Invoice.objects.count()
+    total_income = getTotalIncome()
+    today = timezone.now().date()
+    all_services = Service.objects.filter(Q(service_date=today) & Q(is_complate=False)).order_by('service_date')
+    service_count = Invoice.objects.all()
+    
+    if request.method == "POST":        
+        start_date_str = request.POST.get("start_date")
+        end_date_str = request.POST.get("end_date") 
+        
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+
+        all_services = Service.objects.filter(
+                    Q(service_date__range=(start_date, end_date)) & Q(is_complate=False)
+                ).order_by('service_date')     
+        
+    context = {
+        "total_product": total_product,
+        "total_invoice": total_invoice,
+        "total_income": total_income,
+        "all_services":all_services,
+        "service_count":service_count,
+    }
+    return render(request, "invoice/view_pending_service.html", context)
+    
+    
+def complate_service_management(request):
+    total_product = Product.objects.count()
+    total_invoice = Invoice.objects.count()
+    total_income = getTotalIncome()
+    today = timezone.now().date()
+    all_services = Service.objects.filter(Q(service_date=today) & Q(is_complate=True)).order_by('service_date')
+    service_count = Invoice.objects.all()
+    
+    start_date_str = request.POST.get("start_date")
+    end_date_str = request.POST.get("end_date") 
+
+    if request.method == "POST":        
+        start_date_str = request.POST.get("start_date")
+        end_date_str = request.POST.get("end_date") 
+        
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+
+        all_services = Service.objects.filter(
+                    Q(service_date__range=(start_date, end_date)) & Q(is_complate=False)
+                ).order_by('service_date')     
+        
+        
+        
+    context = {
+        "total_product": total_product,
+        "total_invoice": total_invoice,
+        "total_income": total_income,
+        "all_services":all_services,
+        "service_count":service_count,
+    }
+    return render(request, "invoice/view_complate_service.html", context)
+
+def search_service_management(request):
+    total_product = Product.objects.count()
+    total_invoice = Invoice.objects.count()
+    total_income = getTotalIncome()
+    today = timezone.now().date()
+    service_count = Invoice.objects.all()
+    all_invoice_details = None
+    
+    if request.method == "POST":
+        search_details = request.POST.get("search_details")
+        all_invoice_details = Invoice.objects.get(id=search_details)
+
+    # all_invoice_details = Invoice.objects.all()
+        
+        
+    context = {
+        "total_product": total_product,
+        "total_invoice": total_invoice,
+        "total_income": total_income,
+        "service_count":service_count,
+        "all_invoice_details":all_invoice_details
+    }
+    return render(request, "invoice/view_search_service.html", context)
+    
+def service_status_change(request, pk):
+    today = datetime.now().date()
+    if request.method == "POST":
+        one_service = Service.objects.get(id=pk)
+        one_service.is_complate = True
+        one_service.complate_date = today
+        one_service.save()
+        return redirect("service-view-all")     
+        
+        
+       
 def view_invoice(request):
     total_product = Product.objects.count()
     # total_customer = Customer.objects.count()
@@ -378,6 +526,7 @@ def delete_invoice(request, pk):
     return render(request, "invoice/delete_invoice.html", context)
 
 
+
 # # Edit customer
 # def edit_customer(request, pk):
 #     total_product = Product.objects.count()
@@ -475,3 +624,5 @@ def delete_product(request, pk):
     }
 
     return render(request, "invoice/delete_product.html", context)
+
+

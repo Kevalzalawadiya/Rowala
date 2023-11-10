@@ -67,6 +67,7 @@ class InvoiceForm(forms.ModelForm):
             'comments',
             'contact',
             'email',
+            'subscription'
         ]
         widgets = {
             'customer': forms.TextInput(attrs={
@@ -89,7 +90,10 @@ class InvoiceForm(forms.ModelForm):
                 'id': 'invoice_comments',
                 'placeholder': 'Enter Mobile number of the customer',
             }),
-
+            'subscription': forms.Select(attrs={
+                'class': 'form-control',
+                'id': 'invoice_detail_product',
+            }),
         }
 
 
@@ -105,7 +109,7 @@ class InvoiceDetailForm(forms.ModelForm):
                 'id': 'invoice_detail_amount',
                 'placeholder': '0',
                 'type': 'number',
-            })
+            }),
         }
     product_name = forms.CharField(
         max_length=255, required=False,
@@ -138,5 +142,6 @@ class excelUploadForm(forms.Form):
 
 
 InvoiceDetailFormSet = formset_factory(InvoiceDetailForm, extra=1)
+
 
 
