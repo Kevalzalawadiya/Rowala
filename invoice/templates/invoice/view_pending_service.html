@@ -57,42 +57,38 @@
                                 <td>{{service.service_date| date:"d M, Y"}} ( {{service.service_number}} / {{service.invoice.get_total_services}} ) </td>
                                 <td>{{service.invoice.customer}}-{{service.invoice.comments}}</td>
                                 <td> {{service.invoice.contact}} </td>
-                                {% if service.is_complate %}
-                                    <td>  <i class='far fa-check-circle' style='font-size:20px;color:green'></i> </td>
-                                {% else %}
-                                    <td> 
-                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModalCenter">
-                                            Pending
-                                            </button>
-                                            
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLongTitle"> {{service.invoice.id}}</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <form method='post' action="{% url 'service_status_change' service.id %}">
-                                                        {% csrf_token %}
-                                                        <div class="modal-body">
-                                                            <h1 class="h6 mb-0 text-gray-800"> Dear sir,
-                                                                this is service of <b> {{service.invoice.customer}} </b>
-                                                                You can check more details on <a href="{% url 'view_invoice_pdf_detail' id=service.invoice.id %}"> View invoice </a>
-                                                            </h1>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-primary">Save changes</button>
-                                                        </div>
-                                                    </form>
+                                <td> 
+                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModalCenter{{service.invoice.id}}">
+                                        Pending
+                                    </button>
+                                        
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModalCenter{{service.invoice.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLongTitle"> Invoice id {{service.invoice.id}} Complated ???</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    </button>
                                                 </div>
+                                                <form method='post' action="{% url 'service_status_change' service.id %}">
+                                                    {% csrf_token %}
+                                                    <div class="modal-body">
+                                                        <h1 class="h6 mb-0 text-gray-800">
+                                                            This is "{{service.service_number}}/{{service.invoice.get_total_services}}" service of <b> {{service.invoice.customer}} </b>
+                                                            You can check more details on <a href="{% url 'view_invoice_pdf_detail' id=service.invoice.id %}"> View invoice </a>
+                                                        </h1>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-primary"> Yes !</button>
+                                                    </div>
+                                                </form>
                                             </div>
-                                            </div>    
-                                    </td>
-                                {% endif %}
+                                        </div>
+                                    </div>   
+                                </td>
                                 <td> 
                                     <a href="{% url 'view_invoice_pdf_detail' id=service.invoice.id %}" class="btn btn-outline-primary"
                                     style="width: 100%; height: 100%; border-radius: 0">

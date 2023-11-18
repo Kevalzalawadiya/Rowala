@@ -13,7 +13,6 @@
             <div class="card-body">
                 <form method="post" action="">
                     {% csrf_token %}
-                    
                     <div class="mb-3">
                         <label class="form-label" for="invoice_customer">Customer name</label>
                         {{form.customer}}
@@ -22,11 +21,17 @@
                         <label class="form-label" for="invoice_contact">Address</label>
                         {{form.contact}}
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label" for="invoice_comments">Mobile Number</label>
-                        {{form.comments}}
+                    <div class="form-group row">
+                        <div class="col-sm-6 mb-3 mb-sm-0">
+                            <label class="form-label" for="invoice_comments">Mobile Number</label>
+                        {{form.phone_number}}
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label" for="invoice_comments">Alternative Number</label>
+                        {{form.alt_phone_number}}
+                        </div>
                     </div>
-                    
+                
                     <div class="mb-3">
                         <label class="form-label" for="invoice_email">Email</label>
                         {{form.email}}
@@ -75,7 +80,7 @@
 
 {% endblock %}
 
-{% block custom_js %}
+{% block custom_js %}   
 <script>
     function cloneMore(selector, type) {
         var newElement = $(selector).clone(true);

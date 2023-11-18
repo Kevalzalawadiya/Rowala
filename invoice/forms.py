@@ -16,19 +16,19 @@ class ProductForm(forms.ModelForm):
             'product_name': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'product_name',
-                'placeholder': 'Enter name of the product',
+                'placeholder': 'Enter name of product',
             }),
             'product_price': forms.NumberInput(attrs={
                 'class': 'form-control',
                 'id': 'product_price',
-                'placeholder': 'Enter price of the product',
+                'placeholder': 'Enter price of product',
                 'type': 'number',
                 'required': 'required',
             }),
             'product_unit': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'product_unit',
-                'placeholder': 'Enter unit of the product',
+                'placeholder': 'Enter unit of product',
             }),
         }
         
@@ -38,7 +38,8 @@ class InvoiceForm(forms.ModelForm):
         model = Invoice
         fields = [
             'customer',
-            'comments',
+            'phone_number',
+            'alt_phone_number',
             'contact',
             'email',
             'subscription'
@@ -47,28 +48,32 @@ class InvoiceForm(forms.ModelForm):
             'customer': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'invoice_customer',
-                'placeholder': 'Enter name of the customer',
+                'placeholder': 'Jane Deo',
             }),
             'contact': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'invoice_contact',
-                'placeholder': 'Enter address of the customer',
+                'placeholder': 'Street Address City State',
             }),
             'email': forms.EmailInput(attrs={
                 'class': 'form-control',
                 'id': 'invoice_email',
-                'placeholder': 'Enter email of the customer',
+                'placeholder': 'janedeo@gmail.com',
             }),
-            'comments': forms.TextInput(attrs={
+            'phone_number': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'invoice_comments',
-                'placeholder': 'Enter Mobile number of the customer',
+                'placeholder': 'Enter Mobile number of customer',
+            }),
+            'alt_phone_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'id': 'invoice_comments',
+                'placeholder': 'Alternative phone number of customer',
             }),
             'subscription': forms.Select(attrs={
                 'class': 'form-control',
                 'id': 'invoice_detail_product',
                 'required': 'required',
-
             }),
         }
         

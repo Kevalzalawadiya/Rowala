@@ -223,7 +223,8 @@ def create_invoice(request):
             invoice = Invoice.objects.create(
                 customer=form.cleaned_data.get("customer"),
                 contact=form.cleaned_data.get("contact"),
-                comments =form.cleaned_data.get("comments"),
+                phone_number =form.cleaned_data.get("phone_number"),
+                alt_phone_number =form.cleaned_data.get("alt_phone_number"),
                 email=form.cleaned_data.get("email"),
                 date=form.cleaned_data.get("date"), 
                 subscription=form.cleaned_data.get("subscription"),

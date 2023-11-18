@@ -32,7 +32,15 @@
           <div class="to">INVOICE TO:</div>
           <h2 class="name">{{invoice.customer}}</h2>
           <div class="address">{{invoice.contact}}</div>
-          <div class="address">{{invoice.comments}}</div>
+          {% if invoice.alt_phone_number %}
+            <div class="address">
+              {{invoice.phone_number}} {{invoice.alt_phone_number}} 
+            </div>
+          {% else %}
+            <div class="address">
+              {{invoice.phone_number}} 
+            </div>
+          {% endif %}
           <div class="email"><a href="mailto:{{customer_email}}">{{invoice.email}}</a></div>
         </div>
         <div id="invoice">

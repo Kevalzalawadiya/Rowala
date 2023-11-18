@@ -27,7 +27,8 @@ class Invoice(models.Model):
     contact = models.CharField(
         max_length=255, default='', blank=True, null=True) # Address field
     email = models.EmailField(default='', blank=True, null=True)
-    comments = models.BigIntegerField(blank=True, null=True) # Mobile Number field
+    phone_number = models.BigIntegerField(blank=True, null=True) 
+    alt_phone_number = models.BigIntegerField(blank=True, null=True) 
     total = models.FloatField(default=0)
     subscription = models.ForeignKey(
         Subscription, on_delete=models.SET_NULL, blank=True, null=True
