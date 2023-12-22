@@ -48,7 +48,7 @@ class InvoiceForm(forms.ModelForm):
             'customer': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'invoice_customer',
-                'placeholder': 'Jane Deo',
+                'placeholder': 'Name',
             }),
             'contact': forms.TextInput(attrs={
                 'class': 'form-control',
