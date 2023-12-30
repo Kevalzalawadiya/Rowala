@@ -3,13 +3,12 @@ from . import views
 
 
 urlpatterns = [
-     path('', views.create_invoice, name='home'),
-     path('create_product/', views.create_product, name='create_product'),
-     path('view_product/', views.view_product, name='view_product'),
-     path('edit_product/<int:pk>', views.edit_product, name='edit_product'),
-     path('delete_product/<int:pk>/', views.delete_product, name='delete_product'),
-     path('upload_product_excel', views.upload_product_from_excel,
-         name='upload_product_excel'),
+    path('', views.create_invoice, name='home'),
+    path('create_product/', views.create_product, name='create_product'),
+    path('view_product/', views.view_product, name='view_product'),
+    path('edit_product/<int:pk>', views.edit_product, name='edit_product'),
+    path('delete_product/<int:pk>/', views.delete_product, name='delete_product'),
+    path('upload_product_excel', views.upload_product_from_excel, name='upload_product_excel'),
     # path('create_customer/', views.create_customer, name='create_customer'),
     # path('view_customer/', views.view_customer, name='view_customer'),
     # path('edit_customer/<int:pk>', views.edit_customer, name='edit_customer'),
