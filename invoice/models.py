@@ -4,10 +4,17 @@ from django.utils import timezone
 
 # Create your models here.
 class Product(models.Model):
+    WARRANTY_CHOICES = (
+        ('1 year', '1 year'),
+        ('2 year', '2 year'),
+        ('No warranties', 'No warranties'),
+    )
     product_name = models.CharField(max_length=255)
     product_price = models.FloatField(default=0)
     product_unit = models.CharField(max_length=255, null=True, blank=True)
     product_is_delete = models.BooleanField(default=False)
+    product_warranty = models.CharField(choices=WARRANTY_CHOICES, null=True,
+                                        blank=True, max_length=20, default='No warranties')
 
     def __str__(self):
         return str(self.product_name)

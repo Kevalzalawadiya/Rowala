@@ -63,7 +63,11 @@
 			{% for item in invoice_detail %}
           <tr>
             <td >{{forloop.counter}}</td>
-            <td class="desc">{{item.product}}</td>
+            {% if item.product.product_warranty == "No warranties"%}
+              <td class='desc'> {{item.product}} </td>
+            {% else %}
+              <td class="desc">{{item.product}}, with {{item.product.product_warranty}} warranty. </td>
+            {% endif %}
             <td class="unit">{{item.product.product_price}}</td>
             <td class="qty">{{item.amount}}</td>
             <td >{{item.get_total_bill}}</td>

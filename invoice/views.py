@@ -19,7 +19,6 @@ from django.db.models import Q
 
 # Create your views here.
 
-
 def getTotalIncome():
     allInvoice = Invoice.objects.all()
     totalIncome = 0
@@ -251,7 +250,8 @@ def create_invoice(request):
             for form in formset:
                 product = Product.objects.create(
                     product_name = form.cleaned_data.get("product_name"),
-                    product_price = form.cleaned_data.get("product_price")
+                    product_price = form.cleaned_data.get("product_price"),
+                    product_warranty = form.cleaned_data.get("product_warranty")
                 )
                 print(product)
                 amount = form.cleaned_data.get("amount")
