@@ -5,8 +5,8 @@ from django.utils import timezone
 # Create your models here.
 class Product(models.Model):
     WARRANTY_CHOICES = (
-        ('1 year', '1 year'),
-        ('2 year', '2 year'),
+        ('1 YEAR', '1 YEAR'),
+        ('2 YEAR', '2 YEAR'),
         ('No warranties', 'No warranties'),
     )
     product_name = models.CharField(max_length=255)
