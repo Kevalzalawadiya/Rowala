@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils import timezone
+from django.db.models import Sum
+
 
 
 # Create your models here.
@@ -67,6 +69,12 @@ class InvoiceDetail(models.Model):
     def get_total_bill(self):
         total = float(self.product.product_price) * float(self.amount)
         return total
+    
+    @classmethod
+    def total_income(cls):
+        total_income = cls.objects.aggregate(total=Sum(models.F('product__product_price') * models.F('amount')))['total'] or 0
+        return total_income
+
 
 
 class Service(models.Model):

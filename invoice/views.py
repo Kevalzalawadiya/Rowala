@@ -15,6 +15,7 @@ from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
 from django.db.models import Q
+from django.db.models import Sum, Count
 
 
 # Create your views here.
@@ -28,15 +29,13 @@ def getTotalIncome():
 
 
 def base(request):
-    total_product = Product.objects.count()
-    # total_customer = Customer.objects.count()
-    total_invoice = Invoice.objects.count()
-    total_income = getTotalIncome()
+    total_invoice = Invoice.objects.aggregate(
+        sum=Sum('total'),
+        all_invoices_count=Count('id')
+    )
+    total_incoe = getTotalIncome()
     context = {
-        "total_product": total_product,
-        # "total_customer": total_customer,
         "total_invoice": total_invoice,
-        "total_income": total_income,
     }
 
     return render(request, "invoice/base/base.html", context)
@@ -117,14 +116,12 @@ def upload_product_from_excel(request):
         return redirect("view_product")
     return render(request, "invoice/upload_products.html", {"excelForm": excelForm})
 
-    # Product view
-
 
 def create_product(request):
-    total_product = Product.objects.count()
-    # total_customer = Customer.objects.count()
-    total_invoice = Invoice.objects.count()
-    total_income = getTotalIncome()
+    total_invoice = Invoice.objects.aggregate(
+        sum=Sum('total'),
+        all_invoices_count=Count('id')
+    )
 
     product = ProductForm()
 
@@ -133,12 +130,8 @@ def create_product(request):
         if product.is_valid():
             product.save()
             return redirect("create_product")
-
     context = {
-        "total_product": total_product,
-        # "total_customer": total_customer,
         "total_invoice": total_invoice,
-        "total_income": total_income,
         "product": product,
     }
 
@@ -146,69 +139,26 @@ def create_product(request):
 
 
 def view_product(request):
-    total_product = Product.objects.count()
-    # total_customer = Customer.objects.count()
-    total_invoice = Invoice.objects.count()
-    total_income = getTotalIncome()
+    total_invoice = Invoice.objects.aggregate(
+        sum=Sum('total'),
+        all_invoices_count=Count('id')
+    )
 
     product = Product.objects.filter(product_is_delete=False)
-    print(product)
+    print(prodct)
     context = {
-        "total_product": total_product,
-        # "total_customer": total_customer,
         "total_invoice": total_invoice,
-        "total_income": total_income,
         "product": product,
     }
 
     return render(request, "invoice/view_product.html", context)
 
 
-# Customer view
-# def create_customer(request):
-#     total_product = Product.objects.count()
-#     total_customer = Customer.objects.count()
-#     total_invoice = Invoice.objects.count()
-
-#     customer = CustomerForm()
-
-#     if request.method == "POST":
-#         customer = CustomerForm(request.POST)
-#         if customer.is_valid():
-#             customer.save()
-#             return redirect("create_customer")
-
-#     context = {
-#         "total_product": total_product,
-#         "total_customer": total_customer,
-#         "total_invoice": total_invoice,
-#         "customer": customer,
-#     }
-
-#     return render(request, "invoice/create_customer.html", context)
-
-
-# def view_customer(request):
-#     total_product = Product.objects.count()
-#     total_customer = Customer.objects.count()
-#     total_invoice = Invoice.objects.count()
-
-#     customer = Customer.objects.all()
-
-#     context = {
-#         "total_product": total_product,
-#         "total_customer": total_customer,
-#         "total_invoice": total_invoice,
-#         "customer": customer,
-#     }
-
-#     return render(request, "invoice/view_customer.html", context)
-
 def create_invoice(request):
-    total_product = Product.objects.count()
-    # total_customer = Customer.objects.count()
-    total_invoice = Invoice.objects.count()
-    total_income = getTotalIncome()
+    total_invoice = Invoice.objects.aggregate(
+        sum=Sum('total'),
+        all_invoices_count=Count('id')
+    )
 
     form = InvoiceForm()
     formset = InvoiceDetailFormSet()
@@ -263,24 +213,13 @@ def create_invoice(request):
                     InvoiceDetail(
                         invoice=invoice, product=product, amount=amount
                     ).save()
-            # Pointing the customer
-            # points = 0
-            # if total > 1000:
-            #     points += total / 1000
-            # invoice.customer.customer_points = round(points)
-            # # Save the points to Customer table
-            # invoice.customer.save()
 
             # Save the invoice
             invoice.total = total
             invoice.save()
             return redirect("view_invoice")
-
     context = {
-        "total_product": total_product,
-        # "total_customer": total_customer,
         "total_invoice": total_invoice,
-        "total_income": total_income,
         "product_form": product_form,
         "form": form,
         "formset": formset,
@@ -289,9 +228,10 @@ def create_invoice(request):
     return render(request, "invoice/create_invoice.html", context)
 
 def all_service_management(request):
-    total_product = Product.objects.count()
-    total_invoice = Invoice.objects.count()
-    total_income = getTotalIncome()
+    total_invoice = Invoice.objects.aggregate(
+        sum=Sum('total'),
+        all_invoices_count=Count('id')
+    )
     today = timezone.now().date()
     tomorrow = today + timedelta(days=1)
     all_services = Service.objects.filter(service_date__range=[today, tomorrow]).order_by('service_date')
@@ -309,18 +249,17 @@ def all_service_management(request):
         all_services = Service.objects.filter(service_date__range=(start_date, end_date))
 
     context = {
-        "total_product": total_product,
         "total_invoice": total_invoice,
-        "total_income": total_income,
         "all_services": all_services,
         "service_count": service_count,
     }
     return render(request, "invoice/view_all_service.html", context)
 
 def pending_service_management(request):
-    total_product = Product.objects.count()
-    total_invoice = Invoice.objects.count()
-    total_income = getTotalIncome()
+    total_invoice = Invoice.objects.aggregate(
+        sum=Sum('total'),
+        all_invoices_count=Count('id')
+    )
     today = timezone.now().date()
     all_services = Service.objects.filter(Q(service_date=today) & Q(is_complate=False)).order_by('service_date')
     service_count = Invoice.objects.all()
@@ -337,9 +276,7 @@ def pending_service_management(request):
                 ).order_by('service_date')     
         
     context = {
-        "total_product": total_product,
         "total_invoice": total_invoice,
-        "total_income": total_income,
         "all_services": all_services,
         "service_count": service_count,
     }
@@ -347,9 +284,10 @@ def pending_service_management(request):
     
     
 def complate_service_management(request):
-    total_product = Product.objects.count()
-    total_invoice = Invoice.objects.count()
-    total_income = getTotalIncome()
+    total_invoice = Invoice.objects.aggregate(
+        sum=Sum('total'),
+        all_invoices_count=Count('id')
+    )
     today = timezone.now().date()
     all_services = Service.objects.filter(Q(service_date=today) & Q(is_complate=True)).order_by('service_date')
     service_count = Invoice.objects.all()
@@ -369,9 +307,7 @@ def complate_service_management(request):
                 ).order_by('service_date')     
         
     context = {
-        "total_product": total_product,
         "total_invoice": total_invoice,
-        "total_income": total_income,
         "all_services":all_services,
         "service_count":service_count,
     }
@@ -390,18 +326,14 @@ def service_status_change(request, pk):
         
        
 def view_invoice(request):
-    total_product = Product.objects.count()
-    # total_customer = Customer.objects.count()
-    total_invoice = Invoice.objects.count()
-    total_income = getTotalIncome()
+    total_invoice = Invoice.objects.aggregate(
+        sum=Sum('total'),
+        all_invoices_count=Count('id')
+    )
 
     invoice = Invoice.objects.all()
-
     context = {
-        "total_product": total_product,
-        # "total_customer": total_customer,
         "total_invoice": total_invoice,
-        "total_income": total_income,
         "invoice": invoice,
     }
 
@@ -410,19 +342,15 @@ def view_invoice(request):
 
 # Detail view of invoices
 def view_invoice_detail(request, pk):
-    total_product = Product.objects.count()
-    # total_customer = Customer.objects.count()
-    total_invoice = Invoice.objects.count()
-    total_income = getTotalIncome()
+    total_invoice = Invoice.objects.aggregate(
+        sum=Sum('total'),
+        all_invoices_count=Count('id')
+    )
 
     invoice = Invoice.objects.get(id=pk)
     invoice_detail = InvoiceDetail.objects.filter(invoice=invoice)
-
     context = {
-        "total_product": total_product,
-        # "total_customer": total_customer,
         "total_invoice": total_invoice,
-        "total_income": total_income,
         # 'invoice': invoice,
         "invoice_detail": invoice_detail,
     }
@@ -478,10 +406,10 @@ def generate_PDF(request, id):
 
 #  Delete invoice
 def delete_invoice(request, pk):
-    total_product = Product.objects.count()
-    # total_customer = Customer.objects.count()
-    total_invoice = Invoice.objects.count()
-    total_income = getTotalIncome()
+    total_invoice = Invoice.objects.aggregate(
+        sum=Sum('total'),
+        all_invoices_count=Count('id')
+    )
 
     invoice = Invoice.objects.get(id=pk)
     invoice_detail = InvoiceDetail.objects.filter(invoice=invoice)
@@ -489,12 +417,8 @@ def delete_invoice(request, pk):
         invoice_detail.delete()
         invoice.delete()
         return redirect("view_invoice")
-
     context = {
-        "total_product": total_product,
-        # "total_customer": total_customer,
         "total_invoice": total_invoice,
-        "total_income": total_income,
         "invoice": invoice,
         "invoice_detail": invoice_detail,
     }
@@ -502,75 +426,21 @@ def delete_invoice(request, pk):
     return render(request, "invoice/delete_invoice.html", context)
 
 
-
-# # Edit customer
-# def edit_customer(request, pk):
-#     total_product = Product.objects.count()
-#     # total_customer = Customer.objects.count()
-#     total_invoice = Invoice.objects.count()
-
-#     customer = Customer.objects.get(id=pk)
-#     form = CustomerForm("instance"=customer)
-
-#     if request.method == "POST":
-#         customer = CustomerForm(request.POST, instance=customer)
-#         if customer.is_valid():
-#             customer.save()
-#             return redirect("view_customer")
-
-#     context = {
-#         "total_product": total_product,
-#         "total_customer": total_customer,
-#         "total_invoice": total_invoice,
-#         "customer": form,
-#     }
-
-#     return render(request, "invoice/create_customer.html", context)
-
-
-# Delete customer
-# def delete_customer(request, pk):
-#     total_product = Product.objects.count()
-#     total_customer = Customer.objects.count()
-#     total_invoice = Invoice.objects.count()
-
-#     customer = Customer.objects.get(id=pk)
-
-#     if request.method == "POST":
-#         customer.delete()
-#         return redirect("view_customer")
-
-#     context = {
-#         "total_product": total_product,
-#         "total_customer": total_customer,
-#         "total_invoice": total_invoice,
-#         "customer": customer,
-#     }
-
-#     return render(request, "invoice/delete_customer.html", context)
-
-
 # Edit product
 def edit_product(request, pk):
-    total_product = Product.objects.count()
-    # total_customer = Customer.objects.count()
-    total_invoice = Invoice.objects.count()
-    total_income = getTotalIncome()
+    total_invoice = Invoice.objects.aggregate(
+        sum=Sum('total'),
+        all_invoices_count=Count('id')
+    )
 
     product = Product.objects.get(id=pk)
     form = ProductForm(instance=product)
 
     if request.method == "POST":
-        # customer = CustomerForm(request.POST, instance=product)
-
         product.save()
         return redirect("view_product")
-
     context = {
-        "total_product": total_product,
-        # "total_customer": total_customer,
         "total_invoice": total_invoice,
-        "total_income": total_income,
         "product": form,
     }
 
@@ -579,10 +449,10 @@ def edit_product(request, pk):
 
 # Delete product
 def delete_product(request, pk):
-    total_product = Product.objects.count()
-    # total_customer = Customer.objects.count()
-    total_invoice = Invoice.objects.count()
-    total_income = getTotalIncome()
+    total_invoice = Invoice.objects.aggregate(
+        sum=Sum('total'),
+        all_invoices_count=Count('id')
+    )
 
     product = Product.objects.get(id=pk)
 
@@ -590,15 +460,42 @@ def delete_product(request, pk):
         product.product_is_delete = True
         product.save()
         return redirect("view_product")
-
     context = {
-        "total_product": total_product,
-        # "total_customer": total_customer,
         "total_invoice": total_invoice,
-        "total_income": total_income,
         "product": product,
     }
 
     return render(request, "invoice/delete_product.html", context)
 
+# Complaints 
+def list_complaints(request):
+    total_invoice = Invoice.objects.aggregate(
+        sum=Sum('total'),
+        all_invoices_count=Count('id')
+    )
+    context = {
+        "total_invoice": total_invoice,
+    }
+    return render(request, 'invoice/complains/view_all_complaints.html', context)
 
+
+# Refector old invoice data
+def old_invoice(request):
+    total_invoice = Invoice.objects.aggregate(
+        sum=Sum('total'),
+        all_invoices_count=Count('id')
+    )
+    context = {
+        "total_invoice": total_invoice,
+    }
+    return render(request, 'invoice/older_invoice/older_invoice.html', context)
+
+def dashboard(request):
+    total_invoice = Invoice.objects.aggregate(
+        sum=Sum('total'),
+        all_invoices_count=Count('id'),
+    )
+    context = {
+        "total_invoice": total_invoice,
+    }
+    return render(request, 'invoice/index.html', context)
