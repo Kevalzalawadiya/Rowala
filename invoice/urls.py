@@ -29,10 +29,6 @@ urlpatterns = [
     path('service_status_change/<int:pk>', views.service_status_change, name="service_status_change"),
 
     # Complaint urls
-    path('view_all_complaint/', views.list_complaints, name='view-all-complaint'), 
-
-    # Old Invoice data
-    path('all-old-invoice/', views.old_invoice, name='all-old-invoice')
-    
+    path('view_all_complaint/', views.list_complaints, name='view-all-complaint')    
      
 ]

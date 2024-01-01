@@ -19,21 +19,11 @@ from django.db.models import Sum, Count
 
 
 # Create your views here.
-
-def getTotalIncome():
-    allInvoice = Invoice.objects.all()
-    totalIncome = 0
-    for curr in allInvoice:
-        totalIncome += curr.total
-    return totalIncome
-
-
 def base(request):
     total_invoice = Invoice.objects.aggregate(
         sum=Sum('total'),
         all_invoices_count=Count('id')
     )
-    total_incoe = getTotalIncome()
     context = {
         "total_invoice": total_invoice,
     }
@@ -178,6 +168,8 @@ def create_invoice(request):
                 date=form.cleaned_data.get("date"), 
                 subscription=form.cleaned_data.get("subscription"),
             )
+            print("-------------invoice date--------------->", invoice.date),
+
             # print("------------------>",invoice.subscription.months) #12
             # print("------------------>",invoice.subscription.service_period)
             enddate_date = invoice.date + relativedelta(months=invoice.subscription.months) #2024-11-7
@@ -477,18 +469,6 @@ def list_complaints(request):
         "total_invoice": total_invoice,
     }
     return render(request, 'invoice/complains/view_all_complaints.html', context)
-
-
-# Refector old invoice data
-def old_invoice(request):
-    total_invoice = Invoice.objects.aggregate(
-        sum=Sum('total'),
-        all_invoices_count=Count('id')
-    )
-    context = {
-        "total_invoice": total_invoice,
-    }
-    return render(request, 'invoice/older_invoice/older_invoice.html', context)
 
 def dashboard(request):
     total_invoice = Invoice.objects.aggregate(

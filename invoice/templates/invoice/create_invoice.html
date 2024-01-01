@@ -3,7 +3,7 @@
 {% block content %}
 <div class="row">
     <!-- Area Chart -->
-    <div class="col-xl-12 col-lg-7">
+    <div class="col-xl-8 col-lg-7">
         <div class="card shadow mb-4">
             <!-- Card Header - Dropdown -->
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -11,12 +11,20 @@
             </div>
             <!-- Card Body -->
             <div class="card-body">
-                <form method="post" action="">
+                <form method="post" action=""><form method="post" action="">
                     {% csrf_token %}
-                    <div class="mb-3">
-                        <label class="form-label" for="invoice_customer">Customer name</label>
+                    
+                    <div class="form-group row">
+                        <div class="col-sm-6 mb-3 mb-sm-0">
+                            <label class="form-label" for="invoice_name">Customer Name</label>
                         {{form.customer}}
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label" for="invoice_date">Invoice Date</label>
+                        {{form.date}}
+                        </div>
                     </div>
+
                     <div class="mb-3">
                         <label class="form-label" for="invoice_contact">Address</label>
                         {{form.contact}}
@@ -47,7 +55,7 @@
                     <div class="table">
                         <table class="table">
                             <tr>
-                                <td style="border: 0; padding: 0 0.5em 0 0; width: 45%">
+                                <td style="border: 0; padding: 0 0.5em 0 0; width: 20%">
                                     <label class="form-label" for="product_name">Product name</label>
                                     {{form.product_name}}
                                 </td>
@@ -62,7 +70,7 @@
                                     {{form.amount}}
                                 </td>
                                 
-                                <td style="border: 0; padding: 0 0.5em 0 0; width: 10%">
+                                <td style="border: 0; padding: 0 0.5em 0 0; width: 5%">
                                     <label class="form-label" for="Warranty Year">Warranty Year</label>
                                     {{form.product_warranty}}
                                 </td>

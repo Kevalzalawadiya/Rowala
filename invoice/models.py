@@ -31,7 +31,7 @@ class Subscription(models.Model):
 
 
 class Invoice(models.Model):
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField()
     customer = models.TextField(default='')
     contact = models.CharField(
         max_length=255, default='', blank=True, null=True) # Address field

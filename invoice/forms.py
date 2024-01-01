@@ -43,14 +43,24 @@ class InvoiceForm(forms.ModelForm):
     class Meta:
         model = Invoice
         fields = [
+            "date",
             "customer",
             "phone_number",
             "alt_phone_number",
             "contact",
             "email",
             "subscription",
+            
         ]
         widgets = {
+            "date": forms.DateInput(
+                attrs={
+                    "class": "form-control",
+                    "id": "invoice_date",
+                    "required": "required",
+                    "type": "date"
+                }
+            ),
             "customer": forms.TextInput(
                 attrs={
                     "class": "form-control",
