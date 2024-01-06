@@ -32,7 +32,7 @@ class Subscription(models.Model):
 
 class Invoice(models.Model):
     date = models.DateField()
-    customer = models.TextField(default='')
+    customer = models.CharField(default='', max_length=255)
     contact = models.CharField(
         max_length=255, default='', blank=True, null=True) # Address field
     email = models.EmailField(default='', blank=True, null=True)
@@ -88,3 +88,13 @@ class Service(models.Model):
     
     def __str__(self):
         return f"{self.service_date} {self.is_complate}"
+    
+class Complain(models.Model):
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE,  null=True, blank=True)
+    created_date = models.DateField()
+    is_resolved = models.BooleanField()
+    description = models.TextField()
+
+
+    def __str__(self):
+        return f'{self.invoice.customer} {self.id}'

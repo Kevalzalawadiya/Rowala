@@ -22,6 +22,9 @@ class InvoiceAdmin(admin.ModelAdmin):
 class ServiceAdmin(admin.ModelAdmin):
     list_filter = ['service_date']
 
+class ComplainAdmin(admin.ModelAdmin):
+    list_display = ['id', 'invoice', 'created_date', 'is_resolved']
+
 # Register your models here.
 admin.site.register(Product, ProductAdmin)
 # admin.site.register(Customer, CustomerAdmin)
@@ -29,3 +32,4 @@ admin.site.register(InvoiceDetail, InvoiceDetailAdmin)
 admin.site.register(Invoice, InvoiceAdmin)
 admin.site.register(Subscription)
 admin.site.register(Service, ServiceAdmin)
+admin.site.register(Complain, ComplainAdmin)

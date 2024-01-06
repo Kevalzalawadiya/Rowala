@@ -17,8 +17,14 @@ from dateutil.relativedelta import relativedelta
 from django.db.models import Q
 from django.db.models import Sum, Count
 
+from django.http import JsonResponse
+
+
 
 # Create your views here.
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
 def base(request):
     total_invoice = Invoice.objects.aggregate(
         sum=Sum('total'),
@@ -343,7 +349,7 @@ def view_invoice_detail(request, pk):
     invoice_detail = InvoiceDetail.objects.filter(invoice=invoice)
     context = {
         "total_invoice": total_invoice,
-        # 'invoice': invoice,
+        'invoice': invoice,
         "invoice_detail": invoice_detail,
     }
 
@@ -465,8 +471,23 @@ def list_complaints(request):
         sum=Sum('total'),
         all_invoices_count=Count('id')
     )
+    query = request.GET.get('query', '')
+    find_user = Invoice.objects.filter(customer__icontains = query)
+    forms = ComplainForm()
+    if request.method == "POST":
+        forms = ComplainForm(request.POST)
+        if forms.is_valid():
+            forms.save()
+
+    if is_ajax(request=request):
+        # print(find_user.count())
+        data_list = list(find_user.values())  # Convert queryset to list of dictionaries
+        return JsonResponse(data_list, safe=False)
+
+    
     context = {
         "total_invoice": total_invoice,
+        "form": forms,
     }
     return render(request, 'invoice/complains/view_all_complaints.html', context)
 

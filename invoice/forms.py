@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import formset_factory
 
-from .models import Product, Invoice, InvoiceDetail
+from .models import Product, Invoice, InvoiceDetail, Complain
 
 
 class ProductForm(forms.ModelForm):
@@ -38,6 +38,18 @@ class ProductForm(forms.ModelForm):
             ),
         }
 
+class ComplainForm(forms.ModelForm):
+    class Meta:
+        model = Complain
+        fields = ['invoice', 'description']
+        widgets = {
+            "description": forms.Textarea(
+                attrs={
+                    "class":"form-control",
+                    "required":"required"
+                }
+            ),
+        }
 
 class InvoiceForm(forms.ModelForm):
     class Meta:
@@ -56,7 +68,7 @@ class InvoiceForm(forms.ModelForm):
             "date": forms.DateInput(
                 attrs={
                     "class": "form-control",
-                    "id": "invoice_date",
+                    "id":"start_date",
                     "required": "required",
                     "type": "date"
                 }
@@ -115,7 +127,7 @@ class InvoiceDetailForm(forms.ModelForm):
         choices=Product.WARRANTY_CHOICES,
         widget=forms.Select(
             attrs={
-                "class": "form-control",
+                "class": "form-control selectpicker",
                 "id": "product_warranty",
                 "required": "required",
             }
