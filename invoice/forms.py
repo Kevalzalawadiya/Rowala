@@ -43,6 +43,13 @@ class ComplainForm(forms.ModelForm):
         model = Complain
         fields = ['invoice', 'description']
         widgets = {
+            "invoice": forms.Select(
+                attrs={
+                    "class": "js-example-placeholder-single js-states form-control",
+                    "id": "invoice_detail_product",
+                    "required": "required",
+                }
+            ),
             "description": forms.Textarea(
                 attrs={
                     "class":"form-control",

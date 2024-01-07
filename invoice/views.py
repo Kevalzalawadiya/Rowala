@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404, reverse
 
 from utils.filehandler import handle_file_upload
 
-from .forms import ProductForm, ComplainForm, InvoiceForm, InvoiceDetailForm, excelUploadForm
+from .forms import ProductForm, ComplainForm, InvoiceForm, InvoiceDetailForm, excelUploadForm, InvoiceDetailFormSet
 from .models import Invoice, InvoiceDetail, Service, Product, Complain, Subscription
 import pandas as pd
 
@@ -326,7 +326,7 @@ def view_invoice(request):
         all_invoices_count=Count('id')
     )
 
-    invoice = Invoice.objects.all()
+    invoice = Invoice.objects.all().order_by('id')
     context = {
         "total_invoice": total_invoice,
         "invoice": invoice,
@@ -468,6 +468,7 @@ def list_complaints(request):
         sum=Sum('total'),
         all_invoices_count=Count('id')
     )
+    total_complaints = Complain.objects.all()
     query = request.GET.get('query', '')
     find_user = Invoice.objects.filter(customer__icontains = query)
     forms = ComplainForm()
@@ -475,6 +476,7 @@ def list_complaints(request):
         forms = ComplainForm(request.POST)
         if forms.is_valid():
             forms.save()
+            return redirect('view-all-complaint')
 
     if is_ajax(request=request):
         # print(find_user.count())
@@ -485,6 +487,7 @@ def list_complaints(request):
     context = {
         "total_invoice": total_invoice,
         "form": forms,
+        "total_complaints":total_complaints,
     }
     return render(request, 'invoice/complains/view_all_complaints.html', context)
 

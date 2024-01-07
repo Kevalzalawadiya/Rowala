@@ -43,7 +43,7 @@ class Invoice(models.Model):
         Subscription, on_delete=models.SET_NULL, blank=True, null=True
     )
     def __str__(self):
-        return str(self.id)
+        return str(f'{self.id} {self.customer} {self.phone_number}')
     
     @property
     def get_total_bill(self):
@@ -91,10 +91,10 @@ class Service(models.Model):
     
 class Complain(models.Model):
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE,  null=True, blank=True)
-    created_date = models.DateField()
-    is_resolved = models.BooleanField()
+    created_date = models.DateField(auto_now_add=True)
+    is_resolved = models.BooleanField(default=False)
     description = models.TextField()
 
 
     def __str__(self):
-        return f'{self.invoice.customer} {self.id}'
+        return f'{self.invoice} {self.id}'

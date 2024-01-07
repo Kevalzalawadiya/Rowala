@@ -19,7 +19,6 @@
                                 <th>Price</th>
                                 <th>Amount</th>
                                 <th>Total</th>
-                                <th> Add Complaint </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -37,33 +36,7 @@
                                 <td style="padding: 0.45em;">
                                     {{i.get_total_bill}}
                                 </td>
-                                <td style="padding: 0.45em;width:15%">
-                                    <a data-target="#exampleModalCenter{{i.id}}" data-toggle="modal">
-                                         <i class="fa fa-plus" style="color:blue;"></i>
-                                    </a>
-                                </td>
                             </tr>
-                            
-                            <!-- Modal -->
-                            <div class="modal fade" id="exampleModalCenter{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLongTitle">This is invoice of {{invoice.customer}}</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                    </div>
-                                    <div class="modal-body">
-                                    <p class="model-text"> You can list down complaint for {{i.product}}
-                                    </div>
-                                    <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
                             {% endfor %}
                         </tbody>
                     </table>

@@ -31,8 +31,11 @@
     <!-- Web page icon -->
     <link rel="shortcut icon" href={% static "images/logo/logo1.jpeg" %}/>
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
 
 
 
@@ -592,10 +595,20 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
 
     <script>
-        $("#e1").select2();
+        $(".js-example-placeholder-single").select2({
+            placeholder: "🔎 search customer....",
+            allowClear: true
+        });
+
+        
+        new DataTable('#example',  {
+            order: [[1, 'desc']],
+            columnDefs : [{"type":"date", "targets": 1}],
+        });
+        new DataTable('#complaint_table');
+
     </script>
-    
-    
+
     {% block custom_js %}{% endblock %}
 
 </body>
