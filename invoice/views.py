@@ -1,17 +1,15 @@
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404, reverse
 
 from utils.filehandler import handle_file_upload
 
-from .forms import *
-from .models import *
+from .forms import ProductForm, ComplainForm, InvoiceForm, InvoiceDetailForm, excelUploadForm
+from .models import Invoice, InvoiceDetail, Service, Product, Complain, Subscription
 import pandas as pd
 
-from django.shortcuts import render, redirect, get_object_or_404, reverse
 from datetime import timedelta, datetime
 import pdfkit
 
-from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
 from django.db.models import Q
@@ -20,10 +18,10 @@ from django.db.models import Sum, Count
 from django.http import JsonResponse
 
 
-
 # Create your views here.
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
 
 def base(request):
     total_invoice = Invoice.objects.aggregate(
@@ -141,7 +139,6 @@ def view_product(request):
     )
 
     product = Product.objects.filter(product_is_delete=False)
-    print(prodct)
     context = {
         "total_invoice": total_invoice,
         "product": product,

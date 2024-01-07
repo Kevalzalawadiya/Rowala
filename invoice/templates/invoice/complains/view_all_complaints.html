@@ -13,7 +13,7 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                    <form method="post" action=""><form method="post" action="">
+                    <form method="post" action="">
                         {% csrf_token %}
                         
                         <div class="form-group row">
@@ -34,29 +34,29 @@
                                         </form>
                                     </div>
                                 </div>
-                                <div class="row">
+                                {% comment %} <div class="row">
                                     <div class="col-11">
                                         <div class="card">
-                                            <select class="js-data-example-ajax">
-                                                {% for f in form.invoice %}
-                                                <option> {{f}} </option>
+                                            <select multiple id="e1">
+                                                {% for customer in form.invoice %}
+                                                    <option value="{{ customer }}"> {{customer}} </option>
                                                 {% endfor %}
                                             </select>
                                         </div>
                                     </div>
-                                </div>
+                                </div> {% endcomment %}
                             </div>
                             
                         </div>
     
-                        {% comment %} <div class="mb-3">
+                        <div class="mb-3">
                             <label class="form-label" for="complaint_customer">Customer</label>
                             {{form.invoice}}
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="complaint_description">description</label>
                             {{form.description}}
-                        </div> {% endcomment %}
+                        </div>
                         <div class="mb-3 d-flex justify-content-center">
                             <input class="btn btn-outline-primary" style="margin: 0 1em 0 1em; width: 40%" type="submit">
                             <input class="btn btn-outline-warning" style="margin: 0 1em 0 1em; width: 40%" type="reset">
