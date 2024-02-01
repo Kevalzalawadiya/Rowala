@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.db.models import Sum
-
+from django.contrib.auth.models import User
 
 
 # Create your models here.
@@ -42,6 +42,7 @@ class Invoice(models.Model):
     subscription = models.ForeignKey(
         Subscription, on_delete=models.SET_NULL, blank=True, null=True
     )
+    
     def __str__(self):
         return str(f'{self.id} {self.customer} {self.phone_number}')
     
@@ -59,6 +60,7 @@ class Invoice(models.Model):
     
 
 class InvoiceDetail(models.Model):
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)
     invoice = models.ForeignKey(
         Invoice, on_delete=models.SET_NULL, blank=True, null=True, related_name='invoice')
     product = models.ForeignKey(
@@ -76,7 +78,6 @@ class InvoiceDetail(models.Model):
         return total_income
 
 
-
 class Service(models.Model):
     invoice = models.ForeignKey(
         Invoice, on_delete=models.CASCADE, blank=True, null=True, related_name='total_service')
@@ -89,12 +90,12 @@ class Service(models.Model):
     def __str__(self):
         return f"{self.service_date} {self.is_complate}"
     
+    
 class Complain(models.Model):
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE,  null=True, blank=True)
     created_date = models.DateField(auto_now_add=True)
     is_resolved = models.BooleanField(default=False)
     description = models.TextField()
-
 
     def __str__(self):
         return f'{self.invoice} {self.id}'

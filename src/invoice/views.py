@@ -536,6 +536,9 @@ def dashboard(request):
     ).values('month').annotate(
         total=Sum('total')
     ).order_by('month')
+    
+    # last recent invoices 
+    recent_invoice = Invoice.objects.all().order_by('-date')[0:5]
 
     # Initialize lists for all 12 months with zero totals
     all_months = list(range(1, 13))
@@ -549,5 +552,6 @@ def dashboard(request):
         "total_invoice": total_invoice,
         "months": all_months,
         "totals": totals,
+        "recent_invoice":recent_invoice
     }
     return render(request, 'invoice/index.html', context)
