@@ -1,0 +1,128 @@
+{% extends "invoice/base/base.html" %}
+<!-- Content Row -->
+{% block content %}
+<div class="row">
+    <!-- Area Chart -->
+    <div class="col-xl-12 col-lg-7">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <label class="m-0 font-weight-bold text-primary">Invoice Data <i class="fa fa-database"></i></label>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="example" width="100%" cellspacing="0">
+                        <thead>
+                        <tr style="text-align: center;">
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Customer</th>
+                            <th>Total</th>
+                            <th>Detail</th>
+                            <th>Delete</th>
+                            <th>View</th>
+                            <th>Download</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in invoice %}
+                        <tr>
+                            <td style="padding: 0.45em;">
+                                <a href="#" data-toggle="modal" data-target="#serviceModal{{ i.id }}" > {{ i.id }} </a>
+                                <!-- Modal -->
+                                <div class="modal fade" id="serviceModal{{ i.id }}" tabindex="-1" role="dialog" aria-labelledby="serviceModalTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle"> Invoice id {{i.id}}</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <label class="m-0 font-weight-bold text-secondary"> {{i.subscription}}</label>
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered ">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col"> Service id</th>
+                                                                <th scope="col"> Service date</th>
+                                                                <th scope="col"> Generate date</th>
+                                                                <th scope="col"> Complate date</th>
+                                                                <th scope="col"> is_complate</th>
+                                                                <th scope="col"> service_number</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for service in i.total_service.all %}
+                                                            <tr>
+                                                                <td> {{service.id}} </td>
+                                                                <td> {{service.service_date}} </td>
+                                                                <td> {{service.generate_date}} </td>
+                                                                <td> {{service.complate_date}} </td>
+                                                                {% if service.is_complate %}
+                                                                    <td> 
+                                                                        <i class='far fa-check-circle' style='font-size:20px;color:green' data-toggle="tooltip"
+                                                                            title="{{service.service_number}} service, expected date this service is :-{{service.service_date}} complated at:-{{service.complate_date}}">
+                                                                        </i>
+                                                                    </td>
+                                                                {% else %}
+                                                                <td> 
+                                                                    <i class="fa fa-times-circle" style="font-size:20px;color:red"></i>    
+                                                                </td>
+                                                                {% endif%}
+                                                                <td> {{service.service_number}} / {{i.get_total_services}} </td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end modal-->
+                            </td>
+                            <td style="padding: 0.45em;">
+                                {{i.date|date:"d M, Y"}}
+                            </td>
+                            <td style="padding: 0.45em;">
+                                {{i.customer}}
+                            </td>
+                            <td style="padding: 0.45em; text-align: right;">
+                                {{i.total}}
+                            </td>
+                            <td style="padding: 0;">
+                                <a href="{% url 'view_invoice_detail' i.id %}" class="btn btn-outline-primary"
+                                   style="width: 100%; height: 100%; border-radius: 0">
+                                    <i class="fas fa-long-arrow-alt-right"></i>
+                                </a>
+                            </td>
+                            <td style="padding: 0;">
+                                <a href="{% url 'delete_invoice' i.id %}" class="btn btn-outline-danger"
+                                   style="width: 100%; height: 100%; border-radius: 0">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </td>
+                            <td style="padding: 0;">
+                                <a href="{% url 'view_invoice_pdf_detail' id=i.id %}" class="btn btn-outline-primary"
+                                   style="width: 100%; height: 100%; border-radius: 0">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                            </td>
+                            <td style="padding: 0;">
+                                <a href="{% url 'invoice-download' id=i.id %}" class="btn btn-outline-success"
+                                   style="width: 100%; height: 100%; border-radius: 0">
+                                   <i class="fas fa-file-pdf"></i>    
+                                </a>
+                            </td>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,114 @@
+{% extends "invoice/base/base.html" %}
+<!-- Content Row -->
+{% block content %}
+<body onload="startTime()">
+    <div class="row">
+        <!-- Area Chart -->
+        <div class="col-xl-12 col-lg-7">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Complaints Menu</h6>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                            aria-labelledby="dropdownMenuLink">
+                            <div class="dropdown-header">Features</div>
+                            <a class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Add New Complaint</a> <!-- Model-->
+                            {% comment %} <a class="dropdown-item" href="#">Another action</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Something else here</a> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+                <!--Model Add-->
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLongTitle">Add New Complaint </h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="form-group row">
+                                    <div class="col-sm-12 mb-3 mb-sm-0">
+                                        <label class="form-label" for="invoice_name">Customer search</label>
+                                        <div class="card">
+                                            {{form.invoice}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="complaint_description">description</label>
+                                    {{form.description}}
+                                </div>
+                                <div class="mb-3 d-flex justify-content-center">
+                                    <input class="btn btn-outline-primary" style="margin: 0 1em 0 1em; width: 40%" type="submit">
+                                    <input class="btn btn-outline-warning" style="margin: 0 1em 0 1em; width: 40%" type="reset"> 
+                                </div>
+                            </form>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    {% if total_complaints %}
+                    <table class="table table-bordered border-primary" id="complaint_table">
+                        <thead>
+                            <tr style="text-align: center;">
+                                <th>ID</th>
+                                <th>Date</th>
+                                <th>Customer</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if total_complaints %}
+                                {% for data in total_complaints %}
+                                <tr>
+                                    <td>
+                                        <small>
+                                            <a href="{% url 'view_invoice_pdf_detail' id=data.invoice.id %}">
+                                                <b>{{data.invoice.id}}</b> Invoice Id
+                                            </a>
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <small>{{data.created_date}}</small>
+                                    </td>
+                                    <td>
+                                        <small>{{data.invoice.customer}}</small>
+                                    </td>
+                                    <td>{{data.description}}</td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="4" style="text-align: center;">No data available in the table</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                    
+                    {% else %}
+                        <p class="card-text text-info"> Press three dots : on right side to add complaint. </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}
+
+{% block custom_js %}
+
+{% endblock %}
