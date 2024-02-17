@@ -1,0 +1,62 @@
+{% extends "invoice/base/base.html" %}
+<!-- Content Row -->
+{% block content %}
+<div class="row">
+
+    <!-- Area Chart -->
+    <div class="col-xl-8 col-lg-7" >
+        <div class="card shadow">
+            <!-- Card Header - Dropdown -->
+            <div
+                class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="chart-area">
+                    <canvas id="myAreaChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-lg-5">
+        <div class="card w-100 shadow">
+            <!-- Card Header - Dropdown -->
+            <div
+                class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Recent Invoices</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div id="accordion">
+                        {% for invoice in recent_invoice %}         
+                            <div class="card-header" id="heading{{invoice.id}}">
+                                <h6 class="mb-0 collapsed" data-toggle="collapse" data-target="#collapse{{invoice.id}}" aria-expanded="false" aria-controls="collapse{{invoice.id}}">
+                                    <a class="dropdown-item d-flex align-items-center">
+                                        <div class="mr-3">
+                                            <div class="icon-circle bg-primary">
+                                                <i class="fas fa-file-alt text-white"></i>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="small text-gray-500">{{invoice.date}}</div>
+                                            <span class="font-weight-bold">{{invoice.customer}}</span>
+                                        </div>
+                                    </a>
+                                </h6 >
+                            </div>
+                            <div id="collapse{{invoice.id}}" class="collapse" aria-labelledby="heading{{invoice.id}}" data-parent="#accordion">
+                                <div class="card-body">
+                                    This is a invoice of <b><i>{{invoice.customer}}</i></b>, total amount of this invoice is <b><i>{{invoice.total}}</i></b> and purchased products {{invoice.}}
+                                </div>
+                            </div>
+                        {% endfor %}
+                </div>
+            </div>
+            
+        </div>
+    </div>  
+
+</div>
+
+{% endblock content %}
