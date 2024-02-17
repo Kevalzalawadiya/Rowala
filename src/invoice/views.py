@@ -252,8 +252,7 @@ def all_service_management(request):
     today = timezone.now().date()
     tomorrow = today + timedelta(days=1)
     all_services = Service.objects.filter(service_date__range=[today, tomorrow]).order_by('service_date')
-    # all_services = Service.objects.all()
-    service_count = Invoice.objects.all()
+    service_count = Invoice.objects.filter(user=request.user)
     
     
     if request.method == "POST":        
@@ -279,8 +278,8 @@ def pending_service_management(request):
         all_invoices_count=Count('id')
     )
     today = timezone.now().date()
-    all_services = Service.objects.filter(Q(service_date=today) & Q(is_complate=False)).order_by('service_date')
-    service_count = Invoice.objects.all()
+    all_services = Service.objects.filter(invoice__user=request.user, service_date=today, is_complate=False).order_by('service_date')
+    service_count = Invoice.objects.filter(user=request.user)
     
     if request.method == "POST":        
         start_date_str = request.POST.get("start_date")
@@ -289,9 +288,9 @@ def pending_service_management(request):
         start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
         end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
 
-        all_services = Service.objects.filter(
+        all_services = Service.objects.filter(Q(invoice__user=request.user) &
                     Q(service_date__range=(start_date, end_date)) & Q(is_complate=False)
-                ).order_by('service_date')     
+                ).order_by('service_date')   
         
     context = {
         "total_invoice": total_invoice,
@@ -308,8 +307,8 @@ def complate_service_management(request):
         all_invoices_count=Count('id')
     )
     today = timezone.now().date()
-    all_services = Service.objects.filter(Q(service_date=today) & Q(is_complate=True)).order_by('service_date')
-    service_count = Invoice.objects.all()
+    all_services = Service.objects.filter(invoice__user=request.user, service_date=today, is_complate=True).order_by('service_date')
+    service_count = Invoice.objects.filter(user=request.user)
     
     start_date_str = request.POST.get("start_date")
     end_date_str = request.POST.get("end_date") 
@@ -321,7 +320,7 @@ def complate_service_management(request):
         start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
         end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
 
-        all_services = Service.objects.filter(
+        all_services = Service.objects.filter(Q(invoice__user=request.user) &
                     Q(service_date__range=(start_date, end_date)) & Q(is_complate=True)
                 ).order_by('service_date')     
         
@@ -341,7 +340,7 @@ def service_status_change(request, pk):
         one_service.is_complate = True
         one_service.complate_date = today
         one_service.save()
-        return redirect("service-view-all")     
+        return redirect("dashboard")     
         
         
        
@@ -383,8 +382,6 @@ def view_invoice_detail(request, pk):
 def view_invoice_pdf_detail(request, id=None):
     invoice = get_object_or_404(Invoice, id=id)
     invoice_detail = InvoiceDetail.objects.filter(invoice=invoice)
-
-
 
     context = {
         "company": {
@@ -531,16 +528,18 @@ def dashboard(request):
         sum=Sum('total'),
         all_invoices_count=Count('id'),
     )
-    monthly_totals = Invoice.objects.filter(
-        date__year=date.today().year
-    ).annotate(
+    monthly_totals = Invoice.objects.filter(user=request.user, date__year=date.today().year).annotate(
         month=ExtractMonth('date')
     ).values('month').annotate(
         total=Sum('total')
     ).order_by('month')
+    today = timezone.now().date()
+    tomorrow = today + timedelta(days=1)
+    all_services = Service.objects.filter(invoice__user=request.user, service_date__range=[today, tomorrow]).order_by('service_date')
+    service_count = Invoice.objects.filter(user=request.user)
     
     # last recent invoices 
-    recent_invoice = Invoice.objects.all().order_by('-date')[0:5]
+    recent_invoice = Invoice.objects.filter(user=request.user).order_by('-date')[0:5]
 
     # Initialize lists for all 12 months with zero totals
     all_months = list(range(1, 13))
@@ -554,6 +553,8 @@ def dashboard(request):
         "total_invoice": total_invoice,
         "months": all_months,
         "totals": totals,
-        "recent_invoice":recent_invoice
+        "recent_invoice": recent_invoice,
+        "all_services": all_services,
+        "service_count": service_count
     }
     return render(request, 'invoice/index.html', context)
