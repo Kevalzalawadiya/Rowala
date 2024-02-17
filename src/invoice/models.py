@@ -31,6 +31,7 @@ class Subscription(models.Model):
 
 
 class Invoice(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     date = models.DateField()
     customer = models.CharField(default='', max_length=255)
     contact = models.CharField(

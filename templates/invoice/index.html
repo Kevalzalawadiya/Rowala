@@ -1,11 +1,11 @@
 {% extends "invoice/base/base.html" %}
 <!-- Content Row -->
 {% block content %}
-<div class="row h100">
+<div class="row">
 
     <!-- Area Chart -->
     <div class="col-xl-8 col-lg-7" >
-        <div class="card w-100 shadow">
+        <div class="card shadow">
             <!-- Card Header - Dropdown -->
             <div
                 class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -19,7 +19,7 @@
             </div>
         </div>
     </div>
-    <div class="col-xl-4 col-lg-5" style="height: 100px;">
+    <div class="col-xl-4 col-lg-5">
         <div class="card w-100 shadow">
             <!-- Card Header - Dropdown -->
             <div
@@ -29,7 +29,6 @@
             <!-- Card Body -->
             <div class="card-body">
                 <div id="accordion">
-                    <div class="card">
                         {% for invoice in recent_invoice %}         
                             <div class="card-header" id="heading{{invoice.id}}">
                                 <h6 class="mb-0 collapsed" data-toggle="collapse" data-target="#collapse{{invoice.id}}" aria-expanded="false" aria-controls="collapse{{invoice.id}}">
@@ -52,7 +51,6 @@
                                 </div>
                             </div>
                         {% endfor %}
-                    </div>
                 </div>
             </div>
             
@@ -62,23 +60,3 @@
 </div>
 
 {% endblock content %}
-
-{% comment %} <div class="card-body">
-    <ul class="list-group list-group-flush">    
-        {% for invoice in recent_invoice %}         
-        <div class="list-group-item">
-            <a class="dropdown-item d-flex align-items-center" id="accordion" href="#">
-                <div class="mr-3">
-                    <div class="icon-circle bg-primary">
-                        <i class="fas fa-file-alt text-white"></i>
-                    </div>
-                </div>
-                <div>
-                    <div class="small text-gray-500">{{invoice.date}}</div>
-                    <span class="font-weight-bold">{{invoice.customer}}</span>
-                </div>
-            </a>
-          </div>               
-        {% endfor %}
-      </ul>
-</div> {% endcomment %}

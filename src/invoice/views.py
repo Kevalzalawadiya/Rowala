@@ -37,7 +37,7 @@ def is_ajax(request):
 
 @login_required(login_url='/accounts/login/')
 def base(request):
-    total_invoice = Invoice.objects.aggregate(
+    total_invoice = Invoice.objects.filter(user=request.user).aggregate(
         sum=Sum('total'),
         all_invoices_count=Count('id')
     )
@@ -130,7 +130,7 @@ def upload_product_from_excel(request):
 
 @login_required(login_url='/accounts/login/')
 def create_product(request):
-    total_invoice = Invoice.objects.aggregate(
+    total_invoice = Invoice.objects.filter(user=request.user).aggregate(
         sum=Sum('total'),
         all_invoices_count=Count('id')
     )
@@ -152,7 +152,7 @@ def create_product(request):
 
 @login_required(login_url='/accounts/login/')
 def view_product(request):
-    total_invoice = Invoice.objects.aggregate(
+    total_invoice = Invoice.objects.filter(user=request.user).aggregate(
         sum=Sum('total'),
         all_invoices_count=Count('id')
     )
@@ -167,7 +167,7 @@ def view_product(request):
 
 @login_required(login_url='/accounts/login/')
 def create_invoice(request):
-    total_invoice = Invoice.objects.aggregate(
+    total_invoice = Invoice.objects.filter(user=request.user).aggregate(
         sum=Sum('total'),
         all_invoices_count=Count('id')
     )
@@ -182,6 +182,7 @@ def create_invoice(request):
         
         if form.is_valid():
             invoice = Invoice.objects.create(
+                user = request.user,
                 customer=form.cleaned_data.get("customer"),
                 contact=form.cleaned_data.get("contact"),
                 phone_number =form.cleaned_data.get("phone_number"),
@@ -243,7 +244,7 @@ def create_invoice(request):
 
 @login_required(login_url='/accounts/login/')
 def all_service_management(request):
-    total_invoice = Invoice.objects.aggregate(
+    total_invoice = Invoice.objects.filter(user=request.user).aggregate(
         sum=Sum('total'),
         all_invoices_count=Count('id')
     )
@@ -272,7 +273,7 @@ def all_service_management(request):
 
 @login_required(login_url='/accounts/login/')
 def pending_service_management(request):
-    total_invoice = Invoice.objects.aggregate(
+    total_invoice = Invoice.objects.filter(user=request.user).aggregate(
         sum=Sum('total'),
         all_invoices_count=Count('id')
     )
@@ -301,7 +302,7 @@ def pending_service_management(request):
     
 @login_required(login_url='/accounts/login/')
 def complate_service_management(request):
-    total_invoice = Invoice.objects.aggregate(
+    total_invoice = Invoice.objects.filter(user=request.user).aggregate(
         sum=Sum('total'),
         all_invoices_count=Count('id')
     )
@@ -345,12 +346,12 @@ def service_status_change(request, pk):
        
 @login_required(login_url='/accounts/login/')
 def view_invoice(request):
-    total_invoice = Invoice.objects.aggregate(
+    total_invoice = Invoice.objects.filter(user=request.user).aggregate(
         sum=Sum('total'),
         all_invoices_count=Count('id')
     )
 
-    invoice = Invoice.objects.all().order_by('id')
+    invoice = Invoice.objects.filter(user=request.user).order_by('id')
     context = {
         "total_invoice": total_invoice,
         "invoice": invoice,
@@ -362,7 +363,7 @@ def view_invoice(request):
 # Detail view of invoices
 @login_required(login_url='/accounts/login/')
 def view_invoice_detail(request, pk):
-    total_invoice = Invoice.objects.aggregate(
+    total_invoice = Invoice.objects.filter(user=request.user).aggregate(
         sum=Sum('total'),
         all_invoices_count=Count('id')
     )
@@ -429,7 +430,7 @@ def generate_PDF(request, id):
 #  Delete invoice
 @login_required(login_url='/accounts/login/')
 def delete_invoice(request, pk):
-    total_invoice = Invoice.objects.aggregate(
+    total_invoice = Invoice.objects.filter(user=request.user).aggregate(
         sum=Sum('total'),
         all_invoices_count=Count('id')
     )
@@ -452,7 +453,7 @@ def delete_invoice(request, pk):
 # Edit product
 @login_required(login_url='/accounts/login/')
 def edit_product(request, pk):
-    total_invoice = Invoice.objects.aggregate(
+    total_invoice = Invoice.objects.filter(user=request.user).aggregate(
         sum=Sum('total'),
         all_invoices_count=Count('id')
     )
@@ -474,7 +475,7 @@ def edit_product(request, pk):
 # Delete product
 @login_required(login_url='/accounts/login/')
 def delete_product(request, pk):
-    total_invoice = Invoice.objects.aggregate(
+    total_invoice = Invoice.objects.filter(user=request.user).aggregate(
         sum=Sum('total'),
         all_invoices_count=Count('id')
     )
@@ -495,7 +496,7 @@ def delete_product(request, pk):
 # Complaints 
 @login_required(login_url='/accounts/login/')
 def list_complaints(request):
-    total_invoice = Invoice.objects.aggregate(
+    total_invoice = Invoice.objects.filter(user=request.user).aggregate(
         sum=Sum('total'),
         all_invoices_count=Count('id')
     )
@@ -525,7 +526,7 @@ def list_complaints(request):
 
 @login_required(login_url='/accounts/login/')
 def dashboard(request):
-    total_invoice = Invoice.objects.aggregate(
+    total_invoice = Invoice.objects.filter(user=request.user).aggregate(
         sum=Sum('total'),
         all_invoices_count=Count('id'),
     )
