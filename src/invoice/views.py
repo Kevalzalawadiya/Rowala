@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404, reverse
 from utils.filehandler import handle_file_upload
 
 from .forms import ProductForm, ComplainForm, InvoiceForm, InvoiceDetailForm, excelUploadForm, InvoiceDetailFormSet
-from .models import Invoice, InvoiceDetail, Service, Product, Complain, Subscription
+from .models import Invoice, InvoiceDetail, Service, Product, Complain, BankAccount
 import pandas as pd
 
 from datetime import date, timedelta, datetime, timezone
@@ -191,8 +191,10 @@ def create_invoice(request):
                 email=form.cleaned_data.get("email"),
                 date=form.cleaned_data.get("date"), 
                 subscription=form.cleaned_data.get("subscription"),
+                is_bank_account=form.cleaned_data.get("is_bank_account"),                
             )
-            print("-------------invoice date--------------->", invoice.date),
+            print("-------------invoice date--------------->", invoice.date)
+
 
             # print("------------------>",invoice.subscription.months) #12
             # print("------------------>",invoice.subscription.service_period)
@@ -378,10 +380,11 @@ def view_invoice_detail(request, pk):
 
     return render(request, "invoice/view_invoice_detail.html", context)
 
-@login_required(login_url='/accounts/login/')
+# @login_required(login_url='/accounts/login/')
 def view_invoice_pdf_detail(request, id=None):
     invoice = get_object_or_404(Invoice, id=id)
     invoice_detail = InvoiceDetail.objects.filter(invoice=invoice)
+    bank_details = BankAccount.objects.filter(user=request.user).first()
 
     context = {
         "company": {
@@ -400,14 +403,14 @@ def view_invoice_pdf_detail(request, id=None):
         "due_date": "invoice.due_date",
         "billing_address": "invoice.billing_address",
         "message": "invoice.message",
-        # "lineitem": lineitem,
+        "bank_details": bank_details,
 
     }
     return render(request, 'invoice/pdf_template.html', context)
 
 
 
-@login_required(login_url='/accounts/login/')
+# @login_required(login_url='/accounts/login/')
 def generate_PDF(request, id):
     url = request.build_absolute_uri(reverse('view_invoice_pdf_detail', args=[id]))
     options = {

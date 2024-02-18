@@ -17,7 +17,7 @@ body {
   margin: 0 auto; 
   color: #555555;
   background: #FFFFFF; 
-  font-family: Arial, sans-serif; 
+  font-family: Arial, sans-serif;
   font-size: 14px; 
   font-family: SourceSansPro;
 }
@@ -26,8 +26,12 @@ header {
   padding: 10px 0;
   margin-bottom: 20px;
   border-bottom: 1px solid #AAAAAA;
-}
+  font-family: Arial, sans-serif;
 
+}
+main {
+  font-family: Arial, sans-serif;
+}
 #logo {
   float: left;
   margin-top: 8px;
@@ -209,5 +213,53 @@ footer table td {
   background-color: white;
 }
 
+table.bank_details_table td{
+  text-align: left;
+  padding: 5px;
+  background-color: #f7f2f3;
+}
 
+.info-container {
+  background-color: #f7f2f3; /* Change background color as needed */
+  border: 1px solid #ddd; /* Add border if needed */
+  padding: 20px;
+  border-radius: 5px; /* Add border radius if needed */
+}
 
+.info-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.info-title {
+  font-size: 18px;
+  color: #019de0;
+  font-family:  Arial, sans-serif; 
+}
+
+.info-row {
+  display: flex;
+}
+
+.info-label {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.info-value {
+  font-size: 15px;
+  color: #444;
+}
+
+.auth_class {
+  font-family: Arial, sans-serif;
+  position:static;
+}
+
+.auth_class p {
+  font-size: 15px;
+  text-align: right;
+
+}

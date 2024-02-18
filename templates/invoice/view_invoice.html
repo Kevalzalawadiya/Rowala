@@ -16,8 +16,8 @@
                         <thead>
                         <tr style="text-align: center;">
                             <th>ID</th>
-                            <th>Date</th>
                             <th>Customer</th>
+                            <th>Date</th>
                             <th>Total</th>
                             <th>Detail</th>
                             <th>Delete</th>
@@ -85,10 +85,10 @@
                                 <!-- end modal-->
                             </td>
                             <td style="padding: 0.45em;">
-                                {{i.date|date:"d M, Y"}}
+                                {{i.customer}}
                             </td>
                             <td style="padding: 0.45em;">
-                                {{i.customer}}
+                                {{i.date|date:"d M, Y"}}
                             </td>
                             <td style="padding: 0.45em; text-align: right;">
                                 {{i.total}}

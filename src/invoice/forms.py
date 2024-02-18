@@ -60,6 +60,7 @@ class ComplainForm(forms.ModelForm):
         }
 
 class InvoiceForm(forms.ModelForm):
+    is_bank_account = forms.BooleanField(required=False)
     class Meta:
         model = Invoice
         fields = [
@@ -70,6 +71,7 @@ class InvoiceForm(forms.ModelForm):
             "contact",
             "email",
             "subscription",
+            "is_bank_account"
             
         ]
         widgets = {
@@ -122,7 +124,7 @@ class InvoiceForm(forms.ModelForm):
                     "id": "invoice_detail_product",
                     "required": "required",
                 }
-            ),
+            )
         }
 
     def __init__(self, *args, **kwargs):
@@ -197,3 +199,15 @@ class excelUploadForm(forms.Form):
 
 
 InvoiceDetailFormSet = formset_factory(InvoiceDetailForm, extra=1)
+
+
+# class EmpDetailsForm(forms.Form): 
+#     agree = forms.BooleanField( 
+#         label='Agree', 
+#         required = True, 
+#         disabled = False, 
+#         widget=forms.widgets.CheckboxInput( 
+#             attrs={'class': 'checkbox-inline'}), 
+#             help_text = "I accept the terms in the License Agreement",
+#             error_messages ={'required':'Please check the box'}
+#             )

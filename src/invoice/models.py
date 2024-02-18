@@ -43,6 +43,7 @@ class Invoice(models.Model):
     subscription = models.ForeignKey(
         Subscription, on_delete=models.SET_NULL, blank=True, null=True
     )
+    is_bank_account = models.BooleanField(default=False, null=True, blank=True)
     
     def __str__(self):
         return str(f'{self.id} {self.customer} {self.phone_number}')
@@ -100,3 +101,24 @@ class Complain(models.Model):
 
     def __str__(self):
         return f'{self.invoice} {self.id}'
+    
+
+class BankAccount(models.Model):
+    SAVINGS = 'Savings'
+    CURRENT = 'Current'
+    OTHERS = 'Others'
+
+    ACCOUNT_TYPE_CHOICES = [
+        (SAVINGS, 'Savings'),
+        (CURRENT, 'Current'),
+        (OTHERS, 'Others'),
+    ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    account_holder_name = models.CharField(max_length=100)
+    account_number = models.CharField(max_length=50)
+    ifsc = models.CharField(max_length=20)
+    account_type = models.CharField(max_length=50, choices=ACCOUNT_TYPE_CHOICES, default=SAVINGS)
+    bank = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.account_holder_name}'s account ({self.account_number})"
