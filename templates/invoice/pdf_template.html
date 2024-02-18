@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>View Invoice</title>
     <link rel="stylesheet" href="{%static 'css/invoice-template-1.css' %}" media="all" />
-    <link rel='stylesheet' href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.css">
+    <link rel=”stylesheet” href=”https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.css”>
   </head>
   <body>
     <header class="clearfix">
@@ -63,11 +63,7 @@
 			{% for item in invoice_detail %}
           <tr>
             <td >{{forloop.counter}}</td>
-            {% if item.product.product_warranty == "No warranties"%}
-              <td class='desc'> {{item.product}} </td>
-            {% else %}
-              <td class="desc">{{item.product}}, WITH {{item.product.product_warranty}} GUARANTEE. </td>
-            {% endif %}
+            <td class="desc">{{item.product}}</td>
             <td class="unit">{{item.product.product_price}}</td>
             <td class="qty">{{item.amount}}</td>
             <td >{{item.get_total_bill}}</td>
@@ -146,16 +142,11 @@
           </div>
       </div>
       {% endif %}
-      <div>
-        <p style="font-size:25px;"> Thank You !! </p>
-      </div>
+      <div id="thanks">Thank you! <br> </div>
+      <footer>
+        <h4 style="font-align:right"> Authorized signature: </h4>
+            {% comment %} <td style="text-align: right; "> Authorized signature:</td> {% endcomment %}
+      </footer>
     </main>
-    <div class="row">
-      <div class="auth_class">
-        <div class="col-12">
-          <p> Authorized Signature,  </p>
-        </div>
-      </div>
-    </div>
   </body>
 </html>

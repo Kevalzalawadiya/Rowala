@@ -384,7 +384,7 @@ def view_invoice_detail(request, pk):
 def view_invoice_pdf_detail(request, id=None):
     invoice = get_object_or_404(Invoice, id=id)
     invoice_detail = InvoiceDetail.objects.filter(invoice=invoice)
-    bank_details = BankAccount.objects.filter(user=request.user).first()
+    bank_details = BankAccount.objects.first()
 
     context = {
         "company": {

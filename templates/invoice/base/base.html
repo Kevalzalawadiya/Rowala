@@ -444,7 +444,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span >Copyright &copy; <a href="https://therowala.in/"> theRowala </a>2023</span>
+                        <span >Copyright &copy; <a href="https://therowala.in/"> theRowala </a>2024</span>
                     </div>
                 </div>
             </footer>
@@ -530,9 +530,8 @@
         });
 
         
-        new DataTable('#example',  {
-            order: [[1, 'desc']],
-            columnDefs : [{"type":"date", "targets": 1}],
+        new DataTable('#invoice_list_table',  {
+            "order": [[0, 'desc']],
         });
         new DataTable('#complaint_table');
 

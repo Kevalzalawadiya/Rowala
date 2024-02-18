@@ -12,24 +12,28 @@
             <!-- Card Body -->
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="example" width="100%" cellspacing="0">
+                    <table class="table table-bordered" id="invoice_list_table" width="100%" cellspacing="0">
                         <thead>
                         <tr style="text-align: center;">
-                            <th>ID</th>
-                            <th>Customer</th>
-                            <th>Date</th>
-                            <th>Total</th>
-                            <th>Detail</th>
-                            <th>Delete</th>
-                            <th>View</th>
-                            <th>Download</th>
+                            <th style="width:3%;">ID</th>
+                            <th style="width:3%;">Info</th>
+                            <th style="width:10%;">Customer</th>
+                            <th style="width:10%;">Date</th>
+                            <th style="width:10%;">Total</th>
+                            <th style="width:10%;">Detail</th>
+                            <th style="width:10%;">Delete</th>
+                            <th style="width:10%;">View</th>
+                            <th style="width:10%;">Download</th>
                         </tr>
                         </thead>
                         <tbody>
                         {% for i in invoice %}
                         <tr>
-                            <td style="padding: 0.45em;">
-                                <a href="#" data-toggle="modal" data-target="#serviceModal{{ i.id }}" > {{ i.id }} </a>
+                            <td style="text-align:center;"> {{i.id}} </td>
+                            <td style="padding: 0.45em;text-align:center;">
+                                <a href="" data-toggle="modal" data-target="#serviceModal{{ i.id }}" > 
+                                    <i class="fa fa-info-circle"></i>    
+                                </a>
                                 <!-- Modal -->
                                 <div class="modal fade" id="serviceModal{{ i.id }}" tabindex="-1" role="dialog" aria-labelledby="serviceModalTitle" aria-hidden="true">
                                     <div class="modal-dialog modal-xl  modal-dialog-centered" role="document">
@@ -88,7 +92,7 @@
                                 {{i.customer}}
                             </td>
                             <td style="padding: 0.45em;">
-                                {{i.date|date:"d M, Y"}}
+                                {{i.date|date:"d/m/Y"}}
                             </td>
                             <td style="padding: 0.45em; text-align: right;">
                                 {{i.total}}
